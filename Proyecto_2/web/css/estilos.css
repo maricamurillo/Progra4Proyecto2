@@ -1,0 +1,173 @@
+/*
+    estilos.css
+
+    EIF209 - Programación 4 – Proyecto #1 
+    Abril 2019
+
+    Autores:
+            - 113030275 Mariela Cambronero
+            - 111320128 Rodrigo Rodriguez
+
+*/
+
+body {
+    background-color: white;
+    background-size: cover;
+}
+
+header{
+    background: #333;
+    position: relative;
+    text-shadow: 0 0 30px #fff;
+}
+
+footer{
+    width: 99%;
+    height: 40px;
+    background: #333;
+    border-top: 2px solid #000;
+    margin-top: 40px;
+}
+
+header h3{
+    color: windowframe;
+    font-family: sans-serif;
+}
+
+footer h3{
+    color: windowframe;
+    font-family: sans-serif;
+}
+
+legend{
+    color: black;
+    font-family: sans-serif;
+}
+
+#ingreso {
+    overflow: hidden;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+}
+
+#tablaUsuarios{
+    overflow: hidden;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#tablaGruposDisponibles{
+    overflow: hidden;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#tablaMisGrupos{
+    overflow: hidden;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#datosTablaMisGrupos{
+    overflow: hidden;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#grupo{
+    overflow: hidden;
+    padding: 1em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #4CAF50;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+                    
+
+.tablaDatos {
+    border: 2px burlywood ;
+    border-collapse: collapse;
+}
+
+.tablaDatos th, .tablaDatos td {
+    border: 1px solid darkslategray;
+    padding: 4px 16px 4px 16px;
+    font-size: 10pt;
+}
+
+.tablaDatos caption {
+    border: 1px solid darkslategray;
+    padding: 4px 16px 4px 16px;
+    background-color: lightgray;
+    font-weight: bold;
+}
+
+.tablaDatos th {
+    background-color: darkslategray;
+    color: lightyellow;
+}
+
+.tablaDatos tr:nth-child(even) {
+    background-color: lightgray;
+}
+
+.tablaDatos .columnaValor {
+    text-align: right;
+}
