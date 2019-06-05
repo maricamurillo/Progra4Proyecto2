@@ -12,7 +12,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <footer>
-    <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
     <div>
         <h3>Programacion 4, 2019</h3>
     </div>

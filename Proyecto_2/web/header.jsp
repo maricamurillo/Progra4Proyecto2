@@ -1,8 +1,8 @@
 <%--
     header.jsp
 
-    EIF209 - Programación 4 – Proyecto #1 
-    Abril 2019
+    EIF209 - Programación 4 – Proyecto #2
+    Junio 2019
 
     Autores:
             - 113030275 Mariela Cambronero

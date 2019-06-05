@@ -5,7 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.List;
+import modelo.entidades.Votante;
 
 public class GestorDatos {
 
@@ -51,9 +52,39 @@ public class GestorDatos {
         }
         return encontrado;
     }
+
+    public void insertarVotantes(List<Votante> votantes) {
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_VOTANTES)) {
+            int i = 0;
+
+            for (Votante v : votantes) {
+                statement.setString(1, v.getCedula());
+                statement.setString(2, v.getNombre());
+                statement.setString(3, v.getApellido1());
+                statement.setString(4, v.getApellido2());
+                statement.setString(5, v.getClave());
+                statement.setInt(6, 0);
+                statement.setInt(7, 1);
+                statement.addBatch();
+                i++;
+
+                if (i % 1000 == 0 || i == votantes.size()) {
+                    statement.executeBatch();
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+    }
+
     private static GestorDatos instancia = null;
     private DBManager db = null;
-
     private String URL_Servidor = "localhost";
     private static final String BASE_DATOS = "proyecto_2";
     private static final String LOGIN = "root";
@@ -64,4 +95,20 @@ public class GestorDatos {
     private static final String CMD_VERIFICAR_ADMINISTRADOR = "SELECT cedula\n"
             + "FROM administradores\n"
             + "WHERE usuario = ? AND clave= ?;";
+    private static final String CMD_INSERTAR_VOTANTES = "INSERT INTO votantes\n"
+            + "(cedula,\n"
+            + "nombre,\n"
+            + "apellido1,\n"
+            + "apellido2,\n"
+            + "clave,\n"
+            + "cambio_clave,\n"
+            + "estado)\n"
+            + "VALUES\n"
+            + "(?,\n"
+            + "?,\n"
+            + "?,\n"
+            + "?,\n"
+            + "?,\n"
+            + "?,\n"
+            + "?)";
 }
