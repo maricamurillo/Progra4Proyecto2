@@ -4,6 +4,7 @@ INSERT INTO `proyecto_2`.`votantes`
 VALUES
 ('1','Luis','Alfaro',' Rodríguez','1',NULL,NULL),
 ('402370259','María','Alfaro',' Rodríguez','1',NULL,NULL);
+<<<<<<< HEAD
 
 INSERT INTO `proyecto_2`.`administradores`
 (`cedula`,
@@ -21,3 +22,5 @@ VALUES
 'admin',
 'admin',
 '');
+=======
+>>>>>>> 7893d680125aa37db7a0241227f576f1b472f2fc
