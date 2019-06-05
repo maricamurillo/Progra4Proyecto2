@@ -1,0 +1,33 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+#loging{
+    margin: auto;
+   
+    font-family: Arial,Helvetica,sans-serif;
+}
+ul,ol{
+    list-style: none;
+}
+.loging li a{
+    background-color:#666666;
+    color:#fff;
+    text-decoration:none;
+    padding: 10px 15px;
+    display: block;
+}
+.loging li a:hover{
+    background-color:#999999 
+}
+.loging > li{
+    float:left;
+}
+.loging li ul{
+    display: none;
+    position: absolute;
+    min-width: 140px;  
+}
+.loging li:hover > ul{
+    display: block;
+}

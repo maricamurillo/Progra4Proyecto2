@@ -25,13 +25,12 @@
         <div id="wrapper">
             <header>
                  <%@include file="header.jsp" %> 
-               
             </header>
             <div id="loging">
                 <ul class="loging">
-                    <li><a href="">Loging</a>
+                    <li><a href="">Log in</a>
                         <ul>
-                            <li><a onclick="show('alministrador')"> Alministrador</a></li>
+                            <li><a onclick="show('administrador')"> Administrador</a></li>
                             <li><a onclick="show('usuario')"> Usuario</a></li>  
                         </ul>
                     </li>
@@ -41,17 +40,17 @@
                 <form id="ingreso" action="ServicioIngresoUsuario" method="POST">
                     <table class="tablaFormulario">
                         <thead><h3>Usuario</h3></thead>
-                        ${formulario:campoEtiquetado("Id usuario:","campoId","0")}
+                        ${formulario:campoEtiquetado("Cedula:","campoId","0")}
                         ${formulario:campoEtiquetado("Clave:","campoClave","1")}
                         ${formulario:campoBoton("Ingresar","botonIngreso","1")}
                     </table>
                 </form>
             </div>
-            <div id="alministrador" style="display: none">
-                <form id="ingreso" action="ServicioIngresoAlministrador" method="POST">
+            <div id="administrador" style="display: none">
+                <form id="ingreso" action="ServicioIngresoAdministrador" method="POST">
                     <table class="tablaFormulario">
-                        <thead><h3>Alministrador</h3></thead>
-                        ${formulario:campoEtiquetado("Id usuario:","campoId","0")}
+                        <thead><h3>Administrador</h3></thead>
+                        ${formulario:campoEtiquetado("Usuario:","campoId","0")}
                         ${formulario:campoEtiquetado("Clave:","campoClave","1")}
                         ${formulario:campoBoton("Ingresar","botonIngreso","1")}
                     </table>

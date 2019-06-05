@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelo.Gestor.GestorDatos;
+import modelo.gestor.GestorDatos;
 
 /**
  *
  * @author Rodrigo
  */
-@WebServlet(name = "ServicioIngreso", urlPatterns = {"/ServicioIngreso","/ServicioIngresoUsuario"})
+@WebServlet(name = "ServicioIngreso", urlPatterns = {"/ServicioIngreso", "/ServicioIngresoUsuario", "/ServicioIngresoAdministrador"})
 public class ServicioIngreso extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -29,30 +29,44 @@ public class ServicioIngreso extends HttpServlet {
         response.setHeader("cache-control", "no-cache, no-store, must-revalidate");
         if (request.getServletPath().equals("/ServicioIngresoUsuario")) {
             boolean usuarioValido = false;
-        String usuario = request.getParameter("campoId");
-        String password = request.getParameter("campoClave");
-        
-        if (usuario != null && password != null) {
-            usuarioValido = GestorDatos.obtenerInstancia().verificarUsuario(usuario, password,"usuario");
+            String usuario = request.getParameter("campoId");
+            String password = request.getParameter("campoClave");
+
+            if (usuario != null && password != null) {
+                usuarioValido = GestorDatos.obtenerInstancia().verificarUsuario(usuario, password, "usuario");
+            }
+
+            if (usuarioValido) {
+                HttpSession sesion = request.getSession(true);
+                sesion.setAttribute("usuario", usuario);
+                sesion.setAttribute("control", 1);
+                request.getSession(true).setMaxInactiveInterval(60 * 5);
+                response.sendRedirect("voto.jsp");
+            } else {
+                response.sendRedirect("errorIngreso.jsp");
+            }
+
         }
-        
-        if (usuarioValido) {
-            HttpSession sesion = request.getSession(true);
-            sesion.setAttribute("usuario", usuario);
-            sesion.setAttribute("control", 1);
-            request.getSession(true).setMaxInactiveInterval(60 * 5);
-            response.sendRedirect("voto.jsp");
-        } 
-        else {        
-            response.sendRedirect("errorIngreso.jsp");
+        if (request.getServletPath().equals("/ServicioIngresoAdministrador")) {
+            boolean usuarioValido = false;
+            String usuario = request.getParameter("campoId");
+            String password = request.getParameter("campoClave");
+
+            if (usuario != null && password != null) {
+                usuarioValido = GestorDatos.obtenerInstancia().verificarUsuario(usuario, password, "administrador");
+            }
+
+            if (usuarioValido) {
+                HttpSession sesion = request.getSession(true);
+                sesion.setAttribute("usuario", usuario);
+                sesion.setAttribute("control", 1);
+                request.getSession(true).setMaxInactiveInterval(60 * 5);
+                response.sendRedirect("menuadmin.jsp");
+            } else {
+                response.sendRedirect("errorIngreso.jsp");
+            }
         }
-        
-           
-        }
-        if (request.getServletPath().equals("/ServicioIngresoAlministrador")) {
-           
-        }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -67,7 +81,7 @@ public class ServicioIngreso extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-          // No permite que los datos del usuario sean recibidos por
+        // No permite que los datos del usuario sean recibidos por
         // medio de GET.
         response.sendRedirect("errorIngreso.jsp");
     }
@@ -83,7 +97,7 @@ public class ServicioIngreso extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         try {
+        try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
             Logger.getLogger(ServicioIngreso.class.getName()).log(Level.SEVERE, null, ex);
