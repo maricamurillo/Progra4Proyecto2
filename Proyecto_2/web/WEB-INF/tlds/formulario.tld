@@ -17,4 +17,18 @@
             java.lang.String campoBoton(java.lang.String, java.lang.String, java.lang.String)
         </function-signature>  
     </function>
+    <function>
+        <name>campoArchivo</name>
+        <function-class>beans.Formularios</function-class>
+        <function-signature>
+            java.lang.String campoArchivo(java.lang.String, java.lang.String)
+        </function-signature>  
+    </function>
+    <function>
+        <name>campoTextarea</name>
+        <function-class>beans.Formularios</function-class>
+        <function-signature>
+            java.lang.String campoTextarea(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+        </function-signature>  
+    </function>
 </taglib>

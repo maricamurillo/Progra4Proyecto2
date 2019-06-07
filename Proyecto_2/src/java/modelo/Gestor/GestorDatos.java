@@ -148,7 +148,7 @@ public class GestorDatos {
     private String URL_Servidor = "localhost";
     private static final String BASE_DATOS = "bd_votaciones";
     private static final String LOGIN = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "admin1234";
     private static final String CMD_ESTATUS_VOTANTE = "SELECT cedula\n"
             + "FROM usuario\n"
             + "WHERE cedula = ? AND activo = 1";
