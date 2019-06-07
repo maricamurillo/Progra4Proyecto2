@@ -40,9 +40,9 @@
                 <form id="ingreso" action="ServicioIngresoUsuario" method="POST">
                     <table class="tablaFormulario">
                         <thead><h3>Usuario</h3></thead>
-                        ${formulario:campoEtiquetado("Cedula:","campoId","0")}
-                        ${formulario:campoEtiquetado("Clave:","campoClave","1")}
-                        ${formulario:campoBoton("Ingresar","botonIngreso","1")}
+                        ${formulario:campoEtiquetado("Cedula:","campoIdUsuario","0")}
+                        ${formulario:campoEtiquetado("Clave:","campoClaveUsuario","1")}
+                        ${formulario:campoBoton("Ingresar","botonIngresoUsuario","1")}
                     </table>
                 </form>
             </div>
@@ -50,9 +50,9 @@
                 <form id="ingreso" action="ServicioIngresoAdministrador" method="POST">
                     <table class="tablaFormulario">
                         <thead><h3>Administrador</h3></thead>
-                        ${formulario:campoEtiquetado("Usuario:","campoId","0")}
-                        ${formulario:campoEtiquetado("Clave:","campoClave","1")}
-                        ${formulario:campoBoton("Ingresar","botonIngreso","1")}
+                        ${formulario:campoEtiquetado("Usuario:","campoIdAdm","0")}
+                        ${formulario:campoEtiquetado("Clave:","campoClaveAdm","1")}
+                        ${formulario:campoBoton("Ingresar","botonIngresoAdm","1")}
                     </table>
                 </form>
             </div>        

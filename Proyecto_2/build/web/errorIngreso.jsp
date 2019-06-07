@@ -16,9 +16,7 @@
     <head>
         <title>Error de ingreso</title>
         <meta charset="UTF-8" />
-        
-        <link rel="stylesheet" href="css/default.css" type="text/css">
-        <script src="js/scripts.js" type="text/javascript"></script>
+        <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div id="wrapper">

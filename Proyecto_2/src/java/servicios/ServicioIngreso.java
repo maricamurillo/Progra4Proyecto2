@@ -19,9 +19,10 @@ public class ServicioIngreso extends HttpServlet {
             throws ServletException, IOException, InstantiationException, ClassNotFoundException, IllegalAccessException {
         response.setHeader("cache-control", "no-cache, no-store, must-revalidate");
         if (request.getServletPath().equals("/ServicioIngresoUsuario")) {
+   
             boolean usuarioValido = false;
-            String usuario = request.getParameter("campoId");
-            String password = request.getParameter("campoClave");
+            String usuario = request.getParameter("campoIdUsuario");
+            String password = request.getParameter("campoClaveUsuario");
 
             if (usuario != null && password != null) {
                 usuarioValido = GestorDatos.obtenerInstancia().verificarUsuario(usuario, password, "usuario");
@@ -40,8 +41,8 @@ public class ServicioIngreso extends HttpServlet {
         }
         if (request.getServletPath().equals("/ServicioIngresoAdministrador")) {
             boolean usuarioValido = false;
-            String usuario = request.getParameter("campoId");
-            String password = request.getParameter("campoClave");
+            String usuario = request.getParameter("campoIdAdm");
+            String password = request.getParameter("campoClaveAdm");
 
             if (usuario != null && password != null) {
                 usuarioValido = GestorDatos.obtenerInstancia().verificarUsuario(usuario, password, "administrador");

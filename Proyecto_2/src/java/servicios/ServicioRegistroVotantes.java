@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import modelo.entidades.Votante;
+import modelo.entidades.Usuario;
 import modelo.gestor.GestorDatos;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -40,7 +40,7 @@ public class ServicioRegistroVotantes extends HttpServlet {
             throws ServletException, IOException, InstantiationException, ClassNotFoundException, IllegalAccessException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
 
-        List<Votante> votantes = new ArrayList<>();
+        List<Usuario> votantes = new ArrayList<>();
 
         try {
             for (Part part : request.getParts()) {
@@ -55,11 +55,14 @@ public class ServicioRegistroVotantes extends HttpServlet {
                 InputStreamReader input = new InputStreamReader(part.getInputStream());
                 CSVParser csvParser = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(input);
                 for (CSVRecord record : csvParser) {
-                    votantes.add(new Votante(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), false, 1));
+                    votantes.add(new Usuario(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), 0));
+                   
+        
                 }
-                
-                GestorDatos.obtenerInstancia().insertarVotantes(votantes);
-                
+                for (Usuario c : votantes) {
+                    System.out.println("servicios.ServicioRegistroVotantes.processRequest()"+c.getNombre());
+                }
+                GestorDatos.obtenerInstancia().insertarUsuarios(votantes);
             }
         } catch (IOException | ServletException ex) {
             request.setAttribute("mensaje",

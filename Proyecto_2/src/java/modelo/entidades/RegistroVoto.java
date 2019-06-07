@@ -6,19 +6,19 @@ public class RegistroVoto {
 
     Votacion votacion;
     Partido partido;
-    Votante votante;
+    Usuario votante;
     Date fechaVoto;
     int estado;
     
     public RegistroVoto(){
         this.votacion = new Votacion();
         this.partido = new Partido();
-        this.votante = new Votante();
+        this.votante = new Usuario();
         this.fechaVoto = new Date();
         this.estado = 0;
     }
     
-    public RegistroVoto(Votacion votacion, Partido partido, Votante votante, Date fechaVoto, int estado)
+    public RegistroVoto(Votacion votacion, Partido partido, Usuario votante, Date fechaVoto, int estado)
     {
         this.votacion = votacion;
         this.partido = partido;
@@ -43,11 +43,11 @@ public class RegistroVoto {
         return this.partido;
     }
     
-    public void setVotante(Votante votante) {
+    public void setVotante(Usuario votante) {
         this.votante = votante;
     }
 
-    public Votante getVotante() {
+    public Usuario getVotante() {
         return this.votante;
     }
     

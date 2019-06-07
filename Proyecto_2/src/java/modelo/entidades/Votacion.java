@@ -4,30 +4,50 @@ import java.util.Date;
 
 public class Votacion {
 
-    String id;
+    int id;
     Date fechaInicio;
+    Date fechaApertura;
     Date fechaCierre;
+    Date fechaFinal;
     int estado;
-
     public Votacion() {
-        this.id = "";
+        this.id = 0;
         this.fechaInicio = new Date();
+        this.fechaApertura = new Date();
+        this.fechaFinal = new Date();
         this.fechaCierre = new Date();
         this.estado = 0;
     }
 
-    public Votacion(String id, Date fechaInicio, Date fechaCierre, int estado) {
+    public Votacion(int id, Date fechaInicio, Date fechaApertura, Date fechaCierre, Date fechaFinal, int estado) {
         this.id = id;
         this.fechaInicio = fechaInicio;
+        this.fechaApertura = fechaApertura;
         this.fechaCierre = fechaCierre;
+        this.fechaFinal = fechaFinal;
         this.estado = estado;
     }
+    public Date getFechaApertura() {
+        return fechaApertura;
+    }
 
-    public void setId(String id) {
+    public void setFechaApertura(Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+
+    public Date getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(Date fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+    
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 

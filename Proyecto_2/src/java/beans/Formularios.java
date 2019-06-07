@@ -18,13 +18,13 @@ public class Formularios implements Serializable{
         contenidos.append("<tr>");
         contenidos.append(String.format("<td class=\"etiqueta\">%s</td>", etiqueta));
         contenidos.append("<td class=\"campo\">");
-        if("1".equals(clave)){contenidos.append(String.format("<input type=\"password\" id=\"%1$s\" name=\"%1$s\" size=\"30\" />", id));}
+        if("1".equals(clave)){contenidos.append(String.format("<input type=\"password\" required id=\"%1$s\" name=\"%1$s\" size=\"30\" />", id));}
+        else if("2".equals(clave)){contenidos.append(String.format("<p>%s</p>", id));}
         else contenidos.append(String.format("<input type=\"text\" id=\"%1$s\" name=\"%1$s\" size=\"30\" />", id));
         contenidos.append("</td>");
         contenidos.append("</tr>");
         return contenidos.toString();
-    }
-    
+    } 
     public static String campoBoton(String boton, String id, String tr){
         StringBuilder contenidos = new StringBuilder();
         if("1".equals(tr)){

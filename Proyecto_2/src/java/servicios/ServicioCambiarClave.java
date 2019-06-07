@@ -1,21 +1,12 @@
-
 /*
-
-    ServicioMenu.java
-
-    EIF209 - Programación 4 – Proyecto #1 
-    Abril 2019
-
-    Autores:
-            - 113030275 Mariela Cambronero
-            - 111320128 Rodrigo Rodriguez
-
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-
-
 package servicios;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -23,10 +14,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import modelo.gestor.GestorDatos;
 
-@WebServlet(name = "servicioMenu", urlPatterns = {"/servicioMenu","/salir","/registrarVotantes","/registrarPartidos","/registrarAdministradores","/reportes","/voto"})
-public class ServicioMenu extends HttpServlet {
+/**
+ *
+ * @author Rodrigo
+ */
+@WebServlet(name = "ServicioCambiarClave", urlPatterns = {"/ServicioCambiarClave"})
+public class ServicioCambiarClave extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,27 +35,20 @@ public class ServicioMenu extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, InstantiationException, ClassNotFoundException, IllegalAccessException {
         response.setContentType("text/html;charset=UTF-8");
-        if(request.getServletPath().equals("/salir")){
-            HttpSession sesion = request.getSession(true);
-            String usuario = (String)sesion.getAttribute("usuario");
-            sesion.invalidate();
-            response.sendRedirect("index.jsp");
+        String usuario = (String)request.getSession(true).getAttribute("usuario");
+        String clave = request.getParameter("clave");
+        boolean exito = false;
+        
+        if(clave != null){
+              exito = GestorDatos.obtenerInstancia().cambiarClave(usuario, clave);
+            if (exito) {
+            response.sendRedirect("cambiarclave.jsp?status=1");
+            }
+            else{
+                response.sendRedirect("cambiarclave.jsp?status=2");
+            }
         }
-        if(request.getServletPath().equals("/registrarVotantes")){
-            response.sendRedirect("registrarVotantes.jsp");
-        }
-        if(request.getServletPath().equals("/registrarPartidos")){
-             response.sendRedirect("registrarPartidos.jsp");
-        }
-        if(request.getServletPath().equals("/registrarAdministradores")){
-             response.sendRedirect("registrarAdministradores.jsp");
-        }
-        if(request.getServletPath().equals("/reportes")){
-             response.sendRedirect("reportes.jsp");
-        }
-        if(request.getServletPath().equals("/voto")){
-             response.sendRedirect("voto.jsp");
-        }     
+        else response.sendRedirect("cambiarclave.jsp?status=0");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -78,11 +66,11 @@ public class ServicioMenu extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServicioMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioCambiarClave.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServicioMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioCambiarClave.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServicioMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioCambiarClave.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -100,11 +88,11 @@ public class ServicioMenu extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServicioMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioCambiarClave.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServicioMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioCambiarClave.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServicioMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioCambiarClave.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
