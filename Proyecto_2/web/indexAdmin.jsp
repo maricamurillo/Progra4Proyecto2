@@ -15,8 +15,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
-        <link href="css/loging.css" rel="stylesheet" type="text/css"/>
         <script src="js/scriptLoging.js" type="text/javascript"></script>
         <title>Menu</title>
     </head>

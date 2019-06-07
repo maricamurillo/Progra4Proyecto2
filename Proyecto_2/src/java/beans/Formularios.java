@@ -39,6 +39,27 @@ public class Formularios implements Serializable{
         return contenidos.toString();
     }
     
+    public static String campoArchivo(String etiqueta, String id) {
+        StringBuilder contenidos = new StringBuilder();
+        contenidos.append("<tr>");
+        contenidos.append(String.format("<td class=\"etiqueta\">%s</td>", etiqueta));
+        contenidos.append("<td class=\"campo\">");
+        contenidos.append(String.format("<input type=\"file\" id=\"%1$s\" name=\"%1$s\" />", id));
+        contenidos.append("</td>");
+        contenidos.append("</tr>");
+        return contenidos.toString();
+    }
+    
+    public static String campoTextarea(String etiqueta, String id, String rows, String cols ) {
+        StringBuilder contenidos = new StringBuilder();
+        contenidos.append("<tr>");
+        contenidos.append(String.format("<td class=\"etiqueta\">%s</td>", etiqueta));
+        contenidos.append("<td class=\"campo\">");
+        contenidos.append(String.format("<textarea id=\"%1$s\" name=\"%1$s\" rows=\"%2$s\" cols=\"%3$s\"></textarea>", id, rows, cols));
+        contenidos.append("</td>");
+        contenidos.append("</tr>");
+        return contenidos.toString();
+    }
    
 }
 

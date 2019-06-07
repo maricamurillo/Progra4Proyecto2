@@ -1,11 +1,13 @@
 package modelo.gestor;
 
 import cr.ac.database.managers.DBManager;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import modelo.entidades.Candidato;
 import modelo.entidades.Votante;
 
 public class GestorDatos {
@@ -82,6 +84,10 @@ public class GestorDatos {
             }
         }
     }
+    
+    public void insertarCandidato(Candidato candidato, InputStream in, int size){
+        
+    }
 
     private static GestorDatos instancia = null;
     private DBManager db = null;
@@ -111,4 +117,12 @@ public class GestorDatos {
             + "?,\n"
             + "?,\n"
             + "?)";
+
+    private static final String CMD_INSERTAR_CANDIDATO = "INSERT INTO candidatos\n"
+            + "(cedula, nombre, apellido1, apellido2, foto, estado)\n"
+            + "VALUES (?,?,?,?,?,?)";
+    
+    private static final String CMD_INSERTAR_PARTIDO = "INSERT INTO partidos\n"
+            + "(cedula_candidato, nombre, siglas, bandera, observaciones, estado)\n"
+            + "VALUES (?,?,?,?,?,?)";
 }
