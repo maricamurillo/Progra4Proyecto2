@@ -56,12 +56,8 @@ public class ServicioRegistroVotantes extends HttpServlet {
                 CSVParser csvParser = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(input);
                 for (CSVRecord record : csvParser) {
                     votantes.add(new Usuario(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), 0));
-                   
-        
                 }
-                for (Usuario c : votantes) {
-                    System.out.println("servicios.ServicioRegistroVotantes.processRequest()"+c.getNombre());
-                }
+                
                 GestorDatos.obtenerInstancia().insertarUsuarios(votantes);
             }
         } catch (IOException | ServletException ex) {
