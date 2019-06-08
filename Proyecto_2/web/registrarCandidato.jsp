@@ -15,7 +15,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
-        <title>Registro de Partidos</title>
+        <title>Registro de Candidato</title>
     </head>
     <body>
         <header><%@include file="header.jsp" %></header>
@@ -47,7 +47,7 @@
         <div>
             <form id="registroPartido" action="ServicioRegistroPartidos" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
-                    <thead><h3>Datos del Partido</h3></thead>
+                    <thead><h3>Datos del Candidato</h3></thead>
                     ${formulario:campoEtiquetado("Nombre","nombre","0")}
                     ${formulario:campoEtiquetado("Siglas","siglas","0")}
                     ${formulario:campoArchivo("Bandera","bandera")}

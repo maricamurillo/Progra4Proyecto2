@@ -26,6 +26,21 @@
                 </form>
             </td>
             <td>
+                <form action="registrarVotaciones" method="POST">
+                    ${formulario:campoBoton("Registrar votaciones","botonRegistrarVotaciones","0")}
+                </form>
+            </td>
+            <td>
+                <form action="registrarCandidatos" method="POST">
+                    ${formulario:campoBoton("Registrar candidatos","botonRegistrarCandidatos","0")}
+                </form>
+            </td>
+            <td>
+                <form action="registrarAdministradores" method="POST">
+                    ${formulario:campoBoton("Registrar administradores","botonRegistrarAdministradores","0")}
+                </form>
+            </td>
+            <td>
                 <form action="reportes" method="POST">
                     ${formulario:campoBoton("Reportes","botonReportes","0")}
                 </form>

@@ -18,7 +18,7 @@ public class Usuario {
         this.estado = 0;
     }
 
-    public Usuario(String cedula, String nombre, String apellido1, String apellido2, String clave,int estado) {
+    public Usuario(String cedula, String nombre, String apellido1, String apellido2, String clave, int estado) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -65,7 +65,8 @@ public class Usuario {
 
     public String getClave() {
         return this.clave;
-    } 
+    }
+
     public void setEstado(int estado) {
         this.estado = estado;
     }

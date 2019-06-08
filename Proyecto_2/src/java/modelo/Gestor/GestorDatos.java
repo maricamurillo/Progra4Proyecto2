@@ -1,6 +1,7 @@
 package modelo.gestor;
 
 import cr.ac.database.managers.DBManager;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import modelo.entidades.Partido;
 import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
 
@@ -25,28 +29,30 @@ public class GestorDatos {
         }
         return instancia;
     }
-    public boolean verificaEstatusUsuario(String usuario){
-        boolean activo=false;
-         try {
+
+    public boolean verificaEstatusUsuario(String usuario) {
+        boolean activo = false;
+        try {
             Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
             try (PreparedStatement stm = cnx.prepareStatement(CMD_ESTATUS_VOTANTE)) {
                 stm.clearParameters();
                 stm.setString(1, usuario);
                 ResultSet rs = stm.executeQuery();
                 activo = rs.next();
-               
+
             }
-            
-         }catch (SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace(System.err);
         } finally {
             if (db != null) {
                 db.closeConnection();
             }
-        } 
+        }
         return activo;
-        
+
     }
+
     public boolean verificarUsuario(String usuario, String clave, String tipo) {
         boolean encontrado = false;
         try {
@@ -63,7 +69,7 @@ public class GestorDatos {
                 stm.setString(1, usuario);
                 stm.setString(2, clave);
                 ResultSet rs = stm.executeQuery();
-              
+
                 encontrado = rs.next();
             }
         } catch (SQLException e) {
@@ -75,49 +81,49 @@ public class GestorDatos {
         }
         return encontrado;
     }
-    public List<Votacion> listarVotaciones(String estados) throws SQLException{
+
+    public List<Votacion> listarVotaciones(String estados) throws SQLException {
         List<Votacion> lista = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
-         try (PreparedStatement stm = cnx.prepareStatement(CMD_VOTACIO_ESTADO)) {
-                stm.clearParameters();
-                stm.setString(1, estados);
-                ResultSet rs = stm.executeQuery();
-    
-                while (rs.next()) {
-                    int id = rs.getInt("id_votacion");
-                    Date fechaInicio = rs.getDate("fecha_inicio");
-                    Date fechaApertura = rs.getDate("fecha_apertura");
-                    Date fechaCierre = rs.getDate("fecha_cierre");
-                    Date fechaFinal = rs.getDate("fecha_final");
-                    int estado = rs.getInt("estado");
-                    Votacion x = new Votacion(id, fechaInicio, fechaApertura, fechaCierre, fechaFinal,estado);
-                   
-                    
-                    lista.add(x);
-                }
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_VOTACIO_ESTADO)) {
+            stm.clearParameters();
+            stm.setString(1, estados);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id_votacion");
+                Date fechaInicio = rs.getDate("fecha_inicio");
+                Date fechaApertura = rs.getDate("fecha_apertura");
+                Date fechaCierre = rs.getDate("fecha_cierre");
+                Date fechaFinal = rs.getDate("fecha_final");
+                int estado = rs.getInt("estado");
+                Votacion x = new Votacion(id, fechaInicio, fechaApertura, fechaCierre, fechaFinal, estado);
+                lista.add(x);
+            }
         }
-        
+
         return lista;
-       
+
     }
-     public boolean cambiarClave(String id, String clave) {
+
+    public boolean cambiarClave(String id, String clave) {
         try {
-                DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
-                try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
-                        PreparedStatement stm = cnx.prepareStatement(CMD_CAMBIAR_CLAVE)) {
-                        stm.clearParameters();
-                        stm.setString(1, clave);
-                        stm.setString(2, id);
-                        System.out.println("modelo.gestor.GestorDatos.cambiarClave()"+stm.toString());
-                    return (stm.executeUpdate() == 1);
-                }
-        }
-        catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
-                System.err.printf("Excepción: '%s'%n", ex.getMessage());
-                return false;
+            DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
+            try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                    PreparedStatement stm = cnx.prepareStatement(CMD_CAMBIAR_CLAVE)) {
+                stm.clearParameters();
+                stm.setString(1, clave);
+                stm.setString(2, id);
+                System.out.println("modelo.gestor.GestorDatos.cambiarClave()" + stm.toString());
+                return (stm.executeUpdate() == 1);
+            }
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            return false;
         }
     }
-    public void insertarUsuarios(List<Usuario> usuarios) {
+
+    public boolean insertarUsuarios(List<Usuario> usuarios) {
         try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
                 PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_USUARIOS)) {
             int i = 0;
@@ -134,6 +140,7 @@ public class GestorDatos {
                     statement.executeBatch();
                 }
             }
+            return true;
         } catch (SQLException e) {
             e.printStackTrace(System.err);
         } finally {
@@ -141,6 +148,56 @@ public class GestorDatos {
                 db.closeConnection();
             }
         }
+        return false;
+    }
+
+    public boolean insertarPartido(Partido partido, InputStream in, int size) {
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_PARTIDO)) {
+
+            statement.setString(1, partido.getSiglas());
+            statement.setString(2, partido.getNombre());
+            statement.setBinaryStream(3, in, size);
+            statement.setString(4, partido.getTipoImagen());
+            statement.setString(5, partido.getObservaciones());
+
+            return (statement.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;
+    }
+
+    public static boolean validarFormatoImagen(final String fileName) {
+        Matcher matcher = PATTERN.matcher(fileName);
+        return matcher.matches();
+    }
+
+    public boolean insertarVotacion(Votacion votacion) {
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_VOTACION)) {
+
+            statement.setDate(1, new java.sql.Date(votacion.getFechaInicio().getTime()));
+            statement.setDate(2, new java.sql.Date(votacion.getFechaApertura().getTime()));
+            statement.setDate(3, new java.sql.Date(votacion.getFechaCierre().getTime()));
+            statement.setDate(4, new java.sql.Date(votacion.getFechaFinal().getTime()));
+            statement.setInt(5, votacion.getEstado());
+
+            return (statement.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;
     }
 
     private static GestorDatos instancia = null;
@@ -149,6 +206,8 @@ public class GestorDatos {
     private static final String BASE_DATOS = "bd_votaciones";
     private static final String LOGIN = "root";
     private static final String PASSWORD = "admin1234";
+    private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
+    private static final Pattern PATTERN = Pattern.compile(IMAGE_PATTERN);
     private static final String CMD_ESTATUS_VOTANTE = "SELECT cedula\n"
             + "FROM usuario\n"
             + "WHERE cedula = ? AND activo = 1";
@@ -168,19 +227,13 @@ public class GestorDatos {
             = "UPDATE usuario "
             + "SET clave = ?,activo=1 "
             + "WHERE cedula = ? ";
-    
     private static final String CMD_INSERTAR_USUARIOS = "INSERT INTO USUARIO\n"
-            + "(cedula,\n"
-            + "nombre,\n"
-            + "apellido1,\n"
-            + "apellido2,\n"
-            + "clave,\n"
-            + "activo)\n"
-            + "VALUES\n"
-            + "(?,\n"
-            + "?,\n"
-            + "?,\n"
-            + "?,\n"
-            + "?,\n"
-            + "?)";
+            + "(cedula, nombre, apellido1, apellido2, clave, activo)\n"
+            + "VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String CMD_INSERTAR_PARTIDO = "INSERT INTO PARTIDO\n"
+            + "(siglas, nombre, bandera, tipo_imagen, observaciones)\n"
+            + "VALUES(?,?,?,?,?)";
+    private static final String CMD_INSERTAR_VOTACION = "INSERT INTO VOTACION\n"
+            + "(fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado)\n"
+            + "VALUES(?,?,?,?,?)";
 }

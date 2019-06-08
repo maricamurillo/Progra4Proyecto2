@@ -59,13 +59,14 @@ public class ServicioRegistroVotantes extends HttpServlet {
                 }
                 
                 GestorDatos.obtenerInstancia().insertarUsuarios(votantes);
+                getServletContext().getRequestDispatcher("/registrarVotantes.jsp?status=1").forward(request, response);
             }
         } catch (IOException | ServletException ex) {
             request.setAttribute("mensaje",
                     String.format("Ocurrió una excepción: '%s'", ex.getMessage()));
         }
 
-        getServletContext().getRequestDispatcher("/registrarVotantes.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/registrarVotantes.jsp?status=2").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

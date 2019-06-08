@@ -1,6 +1,8 @@
 package servicios;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import modelo.entidades.Partido;
+import modelo.gestor.GestorDatos;
 
 @WebServlet(name = "ServicioRegistroPartidos", urlPatterns = {"/ServicioRegistroPartidos"})
 @MultipartConfig()
@@ -23,15 +27,11 @@ public class ServicioRegistroPartidos extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, InstantiationException, ClassNotFoundException, IllegalAccessException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String nombrePartido = request.getParameter("nombrePartido");
-        String siglasPartido = request.getParameter("siglasPartido");
-        String cedulaCandidato = request.getParameter("cedulaCandidato");
-        String nombreCandidato = request.getParameter("nombreCandidato");
-        String apellido1Candidato = request.getParameter("apellido1Candidato");
-        String apellido2Candidato = request.getParameter("apellido2Candidato");
+        String nombre = request.getParameter("nombre");
+        String siglas = request.getParameter("siglas");
         String observaciones = request.getParameter("observaciones");
 
         try {
@@ -44,8 +44,20 @@ public class ServicioRegistroPartidos extends HttpServlet {
                                 "Se omitió la selección del archivo.");
                         break;
                     }
-                    
-                    //nombreArchivo, part.getContentType(), part.getInputStream(), (int) part.getSize()
+
+                    if (GestorDatos.obtenerInstancia().validarFormatoImagen(nombreArchivo)) {
+                        try {
+                            GestorDatos.obtenerInstancia().insertarPartido(new Partido(siglas, nombre, "", part.getContentType(), observaciones), part.getInputStream(), (int) part.getSize());
+                            break;
+                        } catch (Exception ex) {
+                            request.setAttribute("mensaje",
+                                    String.format("Excepción: '%s'", ex.getMessage()));
+                        }
+                    } else {
+                        request.setAttribute("mensaje",
+                                "El formato del archivo es incorrecto.");
+                        break;
+                    }
                 }
             }
         } catch (IOException | ServletException ex) {
@@ -53,7 +65,7 @@ public class ServicioRegistroPartidos extends HttpServlet {
                     String.format("Ocurrió una excepción: '%s'", ex.getMessage()));
         }
 
-        getServletContext().getRequestDispatcher("/registrarVotantes.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/registrarPartidos.jsp?status=1").forward(request, response);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -68,7 +80,15 @@ public class ServicioRegistroPartidos extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -82,7 +102,15 @@ public class ServicioRegistroPartidos extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
