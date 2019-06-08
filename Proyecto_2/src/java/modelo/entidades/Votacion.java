@@ -10,6 +10,7 @@ public class Votacion {
     Date fechaCierre;
     Date fechaFinal;
     int estado;
+    
     public Votacion() {
         this.id = 0;
         this.fechaInicio = new Date();

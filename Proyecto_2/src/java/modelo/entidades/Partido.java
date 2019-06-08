@@ -2,56 +2,42 @@ package modelo.entidades;
 
 public class Partido {
 
-    String id;
-    String nombre;
     String siglas;
+    String nombre;
     String bandera;
+    String tipoImagen;
     String observaciones;
-    Candidato candidato;
-    int estado;
 
     public Partido() {
-        this.id = "";
-        this.nombre = "";
         this.siglas = "";
+        this.nombre = "";
         this.bandera = "";
+        this.tipoImagen = "";
         this.observaciones = "";
-        this.candidato = new Candidato();
-        this.estado = 0;
     }
 
-    public Partido(String id, String nombre, String siglas, String bandera, String observaciones, Candidato candidato, int estado) {
-        this.id = id;
-        this.nombre = nombre;
+    public Partido(String siglas, String nombre, String bandera, String tipoImagen, String observaciones) {
         this.siglas = siglas;
+        this.nombre = nombre;
         this.bandera = bandera;
+        this.tipoImagen = tipoImagen;
         this.observaciones = observaciones;
-        this.candidato = candidato;
-        this.estado = estado;
     }
     
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return this.id;
-    }   
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getNombre() {
-        return this.nombre;
-    }
-
     public void setSiglas(String siglas) {
         this.siglas = siglas;
     }
 
     public String getSiglas() {
         return this.siglas;
+    }
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return this.nombre;
     }
 
     public void setBandera(String bandera) {
@@ -61,6 +47,14 @@ public class Partido {
     public String getBandera() {
         return this.bandera;
     }
+    
+    public void setTipoImagen(String tipoImagen) {
+        this.tipoImagen = tipoImagen;
+    }
+
+    public String getTipoImagen() {
+        return this.tipoImagen;
+    }
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
@@ -68,21 +62,5 @@ public class Partido {
 
     public String getObservaciones() {
         return this.observaciones;
-    }
-
-    public void setCandidato(Candidato candidato) {
-        this.candidato = candidato;
-    }
-
-    public Candidato getCandidato() {
-        return this.candidato;
-    }
-    
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-
-    public int getEstado() {
-        return this.estado;
     }
 }
