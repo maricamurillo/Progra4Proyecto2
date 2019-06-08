@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "servicioMenu", urlPatterns = {"/servicioMenu","/salir","/registrarVotantes","/registrarPartidos","/registrarAdministradores","/reportes","/voto"})
+@WebServlet(name = "servicioMenu", urlPatterns = {"/servicioMenu","/salir","/registrarVotantes","/registrarPartidos","/reportes","/voto"})
 public class ServicioMenu extends HttpServlet {
 
     /**
@@ -51,9 +51,6 @@ public class ServicioMenu extends HttpServlet {
         }
         if(request.getServletPath().equals("/registrarPartidos")){
              response.sendRedirect("registrarPartidos.jsp");
-        }
-        if(request.getServletPath().equals("/registrarAdministradores")){
-             response.sendRedirect("registrarAdministradores.jsp");
         }
         if(request.getServletPath().equals("/reportes")){
              response.sendRedirect("reportes.jsp");

@@ -26,11 +26,6 @@
                 </form>
             </td>
             <td>
-                <form action="registrarAdministradores" method="POST">
-                    ${formulario:campoBoton("Registrar administradores","botonRegistrarAdministradores","0")}
-                </form>
-            </td>
-            <td>
                 <form action="reportes" method="POST">
                     ${formulario:campoBoton("Reportes","botonReportes","0")}
                 </form>
