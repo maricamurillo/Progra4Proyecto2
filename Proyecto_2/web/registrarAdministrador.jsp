@@ -34,24 +34,25 @@
                 StringBuilder r = new StringBuilder();
                 switch (status) {
                     case 1:
-                        r.append("Partido creado.");
+                        r.append("Administrador creado.");
                         out.println(String.format("<div class=\"alert success\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
                         break;
                     case 2:
-                        r.append("Ocurrio un error durante la creacion del partido. Verifique datos del partido");
+                        r.append("Ocurrio un error durante la creacion del administrador.");
                         out.println(String.format("<div class=\"alert\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
                         break;
                 }
             }
         %>
         <div>
-            <form id="registroPartido" action="ServicioRegistroPartidos" method="POST" enctype="multipart/form-data">
+            <form id="registroPartido" action="ServicioRegistroAdministradores" method="POST">
                 <table class="tablaFormulario">
                     <thead><h3>Datos del Administrador</h3></thead>
+                    ${formulario:campoEtiquetado("Cedula","cedula","0")}
                     ${formulario:campoEtiquetado("Nombre","nombre","0")}
-                    ${formulario:campoEtiquetado("Siglas","siglas","0")}
-                    ${formulario:campoArchivo("Bandera","bandera")}
-                    ${formulario:campoTextarea("Observaciones","observaciones","4", "50")}
+                    ${formulario:campoEtiquetado("Primer apellido","apellido1","0")}
+                    ${formulario:campoEtiquetado("Segundo apellido","apellido2","0")}
+                    ${formulario:campoEtiquetado("Usuario","usuario","0")}
                 </table>
                 ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>

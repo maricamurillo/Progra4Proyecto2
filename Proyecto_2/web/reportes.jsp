@@ -1,7 +1,12 @@
-<%-- 
-    Document   : reportes
-    Created on : 04/06/2019, 04:22:38 PM
-    Author     : Rodrigo
+<%--
+    registrarPartidos.jsp
+
+    EIF209 - Programación 4 – Proyecto #2
+    Junio 2019
+
+    Autores:
+            - 113030275 Mariela Cambronero
+            - 111320128 Rodrigo Rodriguez
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,9 +14,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
+        <title>Reportes</title>
     </head>
     <body>
-        <h1>reporte</h1>
+        <header><%@include file="header.jsp" %></header>
+        <div id="wrapper">
+            <%@include file="menuAdmin.jsp" %>
+        </div>
+        <%@include file="footer.jsp" %>
     </body>
 </html>

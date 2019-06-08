@@ -8,7 +8,6 @@ public class Administrador {
     String apellido2;
     String usuario;
     String clave;
-    String observaciones;
 
     public Administrador() {
         this.cedula = "";
@@ -17,17 +16,15 @@ public class Administrador {
         this.apellido2 = "";
         this.usuario = "";
         this.clave = "";
-        this.observaciones = "";
     }
 
-    public Administrador(String cedula, String nombre, String apellido1, String apellido2, String usuario, String clave, String observaciones) {
+    public Administrador(String cedula, String nombre, String apellido1, String apellido2, String usuario, String clave) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.usuario = usuario;
         this.clave = clave;
-        this.observaciones = observaciones;
     }
 
     public void setCedula(String cedula) {
@@ -76,13 +73,5 @@ public class Administrador {
 
     public String getClave() {
         return this.clave;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public String getObservaciones() {
-        return this.observaciones;
     }
 }

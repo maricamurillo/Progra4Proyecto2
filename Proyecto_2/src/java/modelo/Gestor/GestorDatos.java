@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import modelo.entidades.Administrador;
 import modelo.entidades.Partido;
 import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
@@ -243,6 +244,28 @@ public class GestorDatos {
         }
         return false;
     }
+    
+    public boolean insertarAdministrador(Administrador administrador) {
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_ADMINISTRADOR)) {
+            
+            statement.setString(1, administrador.getCedula());
+            statement.setString(2, administrador.getNombre());
+            statement.setString(3, administrador.getApellido1());
+            statement.setString(4, administrador.getApellido2());
+            statement.setString(5, administrador.getUsuario());
+            statement.setString(6, administrador.getCedula());
+            return (statement.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;
+    }
 
     private static GestorDatos instancia = null;
     private DBManager db = null;
@@ -283,4 +306,7 @@ public class GestorDatos {
     private static final String CMD_INSERTAR_VOTACION_PARTIDO = "INSERT INTO VOTACION_PARTIDO\n"
             + "(votacion_id, partido_siglas, cedula_candidato, foto_candidato, tipo_imagen)\n"
             + "VALUES(?,?,?,?,?)";
+    private static final String CMD_INSERTAR_ADMINISTRADOR = "INSERT INTO ADMINISTRADOR\n"
+            + "(cedula, nombre, apellido1, apellido2, usuario, clave)\n"
+            + "VALUES (?,?,?,?,?,?)";
 }
