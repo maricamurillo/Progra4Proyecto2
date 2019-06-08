@@ -50,7 +50,7 @@ public class ServicioMenu extends HttpServlet {
             response.sendRedirect("registrarVotantes.jsp");
         }
         if(request.getServletPath().equals("/registrarPartidos")){
-             response.sendRedirect("registrarPartidos.jsp");
+             response.sendRedirect("registrarPartido.jsp");
         }
         if(request.getServletPath().equals("/registrarVotaciones")){
              response.sendRedirect("registrarVotacion.jsp");

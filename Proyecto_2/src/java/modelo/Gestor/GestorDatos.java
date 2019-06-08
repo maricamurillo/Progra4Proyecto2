@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import modelo.entidades.Partido;
 import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
+import modelo.entidades.VotacionPartido;
 
 public class GestorDatos {
 
@@ -125,7 +126,7 @@ public class GestorDatos {
 
     public boolean insertarUsuarios(List<Usuario> usuarios) {
         try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
-                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_USUARIOS)) {
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_USUARIO)) {
             int i = 0;
             for (Usuario v : usuarios) {
                 statement.setString(1, v.getCedula());
@@ -200,6 +201,49 @@ public class GestorDatos {
         return false;
     }
 
+    public boolean insertarUsuario(Usuario usuario) {
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_USUARIO)) {
+            
+            statement.setString(1, usuario.getCedula());
+            statement.setString(2, usuario.getNombre());
+            statement.setString(3, usuario.getApellido1());
+            statement.setString(4, usuario.getApellido2());
+            statement.setString(5, usuario.getClave());
+            statement.setInt(6, 0);
+            return (statement.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;
+    }
+
+    public boolean insertarVotacionPartido(VotacionPartido votacionPartido, InputStream in, int size) {
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_VOTACION_PARTIDO)) {
+
+            statement.setInt(1, votacionPartido.getVotacion().getId());
+            statement.setString(2, votacionPartido.getPartido().getSiglas());
+            statement.setString(3, votacionPartido.getCandidato().getCedula());
+            statement.setBinaryStream(4, in, size);
+            statement.setString(5, votacionPartido.getTipoImagen());
+            return (statement.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;
+    }
+
     private static GestorDatos instancia = null;
     private DBManager db = null;
     private String URL_Servidor = "localhost";
@@ -227,7 +271,7 @@ public class GestorDatos {
             = "UPDATE usuario "
             + "SET clave = ?,activo=1 "
             + "WHERE cedula = ? ";
-    private static final String CMD_INSERTAR_USUARIOS = "INSERT INTO USUARIO\n"
+    private static final String CMD_INSERTAR_USUARIO = "INSERT INTO USUARIO\n"
             + "(cedula, nombre, apellido1, apellido2, clave, activo)\n"
             + "VALUES (?, ?, ?, ?, ?, ?)";
     private static final String CMD_INSERTAR_PARTIDO = "INSERT INTO PARTIDO\n"
@@ -235,5 +279,8 @@ public class GestorDatos {
             + "VALUES(?,?,?,?,?)";
     private static final String CMD_INSERTAR_VOTACION = "INSERT INTO VOTACION\n"
             + "(fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado)\n"
+            + "VALUES(?,?,?,?,?)";
+    private static final String CMD_INSERTAR_VOTACION_PARTIDO = "INSERT INTO VOTACION_PARTIDO\n"
+            + "(votacion_id, partido_siglas, cedula_candidato, foto_candidato, tipo_imagen)\n"
             + "VALUES(?,?,?,?,?)";
 }

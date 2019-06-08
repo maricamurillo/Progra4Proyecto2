@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import modelo.entidades.Partido;
+import modelo.entidades.VotacionPartido;
 import modelo.gestor.GestorDatos;
 
-@WebServlet(name = "ServicioRegistroPartidos", urlPatterns = {"/ServicioRegistroPartidos"})
+@WebServlet(name = "ServicioRegistroCandidatos", urlPatterns = {"/ServicioRegistroCandidatos"})
 @MultipartConfig()
-public class ServicioRegistroPartidos extends HttpServlet {
+public class ServicioRegistroCandidatos extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,11 +29,23 @@ public class ServicioRegistroPartidos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, InstantiationException, ClassNotFoundException, IllegalAccessException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
+        String cedula = request.getParameter("cedula");
         String nombre = request.getParameter("nombre");
-        String siglas = request.getParameter("siglas");
-        String observaciones = request.getParameter("observaciones");
-
+        String apellido1 = request.getParameter("apellido1");
+        String apellido2 = request.getParameter("apellido2");
+        String partido = request.getParameter("partido");
+        String votacion = request.getParameter("votacion");
+        
+        VotacionPartido votacionPartido = new VotacionPartido();
+        votacionPartido.getCandidato().setCedula(cedula);
+        votacionPartido.getCandidato().setNombre(nombre);
+        votacionPartido.getCandidato().setApellido1(apellido1);
+        votacionPartido.getCandidato().setApellido2(apellido2);
+        votacionPartido.getCandidato().setClave(cedula);
+        votacionPartido.getPartido().setSiglas(partido);
+        votacionPartido.getVotacion().setId(Integer.parseInt(votacion));
+        
         try {
             for (Part part : request.getParts()) {
                 if (part.getSubmittedFileName() != null) {
@@ -45,8 +57,10 @@ public class ServicioRegistroPartidos extends HttpServlet {
 
                     if (GestorDatos.obtenerInstancia().validarFormatoImagen(nombreArchivo)) {
                         try {
-                            GestorDatos.obtenerInstancia().insertarPartido(new Partido(siglas, nombre, "", part.getContentType(), observaciones), part.getInputStream(), (int) part.getSize());
-                            getServletContext().getRequestDispatcher("/registrarPartido.jsp?status=1").forward(request, response);
+                            votacionPartido.setTipoImagen(part.getContentType());
+                            GestorDatos.obtenerInstancia().insertarUsuario(votacionPartido.getCandidato());
+                            GestorDatos.obtenerInstancia().insertarVotacionPartido(votacionPartido, part.getInputStream(), (int) part.getSize());
+                            getServletContext().getRequestDispatcher("/registrarCandidato.jsp?status=1").forward(request, response);
                         } catch (Exception ex) {
                             break;
                         }
@@ -58,10 +72,10 @@ public class ServicioRegistroPartidos extends HttpServlet {
         } catch (IOException | ServletException ex) {
         }
 
-        getServletContext().getRequestDispatcher("/registrarPartido.jsp?status=2").forward(request, response);
+        getServletContext().getRequestDispatcher("/registrarCandidato.jsp?status=2").forward(request, response);
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -76,11 +90,11 @@ public class ServicioRegistroPartidos extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroCandidatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroCandidatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroCandidatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -98,11 +112,11 @@ public class ServicioRegistroPartidos extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroCandidatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroCandidatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServicioRegistroPartidos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroCandidatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -115,4 +129,5 @@ public class ServicioRegistroPartidos extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }
