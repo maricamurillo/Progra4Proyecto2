@@ -269,36 +269,106 @@ public class GestorDatos {
     }
 
     public List<Usuario> listarUsuarios() throws SQLException {
-        List<Usuario> usuarios = new ArrayList<>();
+        List<Usuario> datos = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
 
         try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_USUARIOS)) {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                usuarios.add(new Usuario(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), "", rs.getInt("activo")));
+                datos.add(new Usuario(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), "", rs.getInt("activo")));
             }
         }
 
-        return usuarios;
+        return datos;
     }
     
     public JSONObject obtenerTablaUsuarios() throws SQLException{
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
-        List<Usuario> usuarios = listarUsuarios();
+        List<Usuario> datos = listarUsuarios();
         
-        for (Usuario usuario : usuarios) {
+        for (Usuario dato : datos) {
             JSONObject j = new JSONObject();
-            j.put("cedula", usuario.getCedula());
-            j.put("apellidos", usuario.getApellido1() + " " + usuario.getApellido2());
-            j.put("nombre", usuario.getNombre());
-            if (usuario.getEstado() == 1) {
+            j.put("cedula", dato.getCedula());
+            j.put("apellidos", dato.getApellido1() + " " + dato.getApellido2());
+            j.put("nombre", dato.getNombre());
+            if (dato.getEstado() == 1) {
                 j.put("estado", "Activo");
             }
             else{
                 j.put("estado", "Inactivo");
             }
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
+    
+    public List<Votacion> listarVotaciones() throws SQLException {
+        List<Votacion> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACIONES)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                datos.add(new Votacion(0, rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
+            }
+        }
+
+        return datos;
+    }
+    
+    public JSONObject obtenerTablaVotaciones() throws SQLException{
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Votacion> datos = listarVotaciones();
+        
+        for (Votacion dato : datos) {
+            JSONObject j = new JSONObject();
+            j.put("fecha_inicio", dato.getFechaInicio());
+            j.put("fecha_apertura", dato.getFechaApertura());
+            j.put("fecha_cierre", dato.getFechaCierre());
+            j.put("fecha_final", dato.getFechaFinal());
+            if (dato.getEstado() == 1) {
+                j.put("estado", "Activa");
+            }
+            else{
+                j.put("estado", "Inactiva");
+            }
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
+    
+    public List<Administrador> listarAdministradores() throws SQLException {
+        List<Administrador> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_ADMINISTRADORES)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                datos.add(new Administrador(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), rs.getString("usuario"), ""));
+            }
+        }
+
+        return datos;
+    }
+    
+    public JSONObject obtenerTablaAdministradores() throws SQLException{
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Administrador> datos = listarAdministradores();
+        
+        for (Administrador dato : datos) {
+            JSONObject j = new JSONObject();
+            j.put("cedula", dato.getCedula());
+            j.put("apellidos", dato.getApellido1() + " " + dato.getApellido2());
+            j.put("nombre", dato.getNombre());
+            j.put("usuario", dato.getUsuario());
             a.put(j);
         }
         r.put("datos", a);
@@ -349,5 +419,11 @@ public class GestorDatos {
             + "VALUES (?,?,?,?,?,?)";
     private static final String CMD_LISTAR_USUARIOS = "SELECT cedula, apellido1, apellido2, nombre, activo\n"
             + "FROM bd_votaciones.usuario\n"
+            + "ORDER BY apellido1, apellido2 ASC";
+    private static final String CMD_LISTAR_VOTACIONES = "SELECT fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
+            + "FROM bd_votaciones.votacion\n"
+            + "ORDER BY fecha_inicio";
+    private static final String CMD_LISTAR_ADMINISTRADORES = "SELECT cedula, apellido1, apellido2, nombre, usuario\n"
+            + "FROM bd_votaciones.administrador\n"
             + "ORDER BY apellido1, apellido2 ASC";
 }

@@ -15,10 +15,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
+        <script src="js/loadJSON.js" type="text/javascript"></script>
+        <script src="js/scriptVotaciones.js" type="text/javascript"></script>
         <title>Registro de Votacion</title>
     </head>
-    <body>
-        <header><%@include file="header.jsp" %></header>
+    <body onload="init()">
+        <header>
+            <%@include file="header.jsp" %>
+        </header>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
         </div>
@@ -55,6 +59,23 @@
                 </table>
                 ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
+        </div>
+        <div id="contents">
+            <table id="tablaVotaciones">
+                <thead>
+                    <tr>
+                        <td colspan="5"><h3>Listado de Votaciones</h3></td>
+                    </tr>
+                    <tr>
+                        <td>Fecha Inicio</td>
+                        <td>Fecha Apertura</td>
+                        <td>Fecha Cierre</td>
+                        <td>Fecha Final</td>
+                        <td>Estado</td>
+                    </tr>
+                </thead>
+                <tbody id="datosTablaVotaciones"></tbody>
+            </table>
         </div>
         <script>
             var close = document.getElementsByClassName("closebtn");

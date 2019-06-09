@@ -3,12 +3,13 @@ function init() {
 }
 
 function cargarJson() {
-    loadJSON(solicitarTabla,"ServicioListados?listar=usuarios");  
+    loadJSON(solicitarTabla,"ServicioListados?listar=votaciones");  
 }
 
 function solicitarTabla(textoJSON){
+    console.log(textoJSON);
     var tabla = JSON.parse(textoJSON);
-    var refTabla = document.getElementById("datosTablaUsuarios");
+    var refTabla = document.getElementById("datosTablaVotaciones");
      if(refTabla){
         while (refTabla.rows.length>0){
             refTabla.deleteRow(0);
@@ -17,11 +18,13 @@ function solicitarTabla(textoJSON){
             var tr = refTabla.insertRow(-1);
             var td;
             td = tr.insertCell(-1);
-            td.innerText = tabla.datos[i].cedula;
+            td.innerText = tabla.datos[i].fecha_inicio;
             td = tr.insertCell(-1);
-            td.innerText = tabla.datos[i].apellidos;
+            td.innerText = tabla.datos[i].fecha_apertura;
             td = tr.insertCell(-1);
-            td.innerText = tabla.datos[i].nombre;
+            td.innerText = tabla.datos[i].fecha_cierre;
+            td = tr.insertCell(-1);
+            td.innerText = tabla.datos[i].fecha_final;
             td = tr.insertCell(-1);
             td.innerText = tabla.datos[i].estado;
         }

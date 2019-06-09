@@ -19,7 +19,7 @@
         <script src="js/scriptUsuarios.js" type="text/javascript"></script>
         <title>Registro de Usuarios</title>
     </head>
-    <body onload="initUsuarios()">
+    <body onload="init()">
         <header>
             <%@include file="header.jsp" %>
         </header>

@@ -1,8 +1,8 @@
-function initUsuarios() {
-    cargarUsuarios();
+function init() {
+    cargarJson();
 }
 
-function cargarUsuarios() {
+function cargarJson() {
     loadJSON(solicitarTabla,"ServicioListados?listar=usuarios");  
 }
 

@@ -3,12 +3,12 @@ function init() {
 }
 
 function cargarJson() {
-    loadJSON(solicitarTabla,"ServicioListados?listar=usuarios");  
+    loadJSON(solicitarTabla,"ServicioListados?listar=administradores");  
 }
 
 function solicitarTabla(textoJSON){
     var tabla = JSON.parse(textoJSON);
-    var refTabla = document.getElementById("datosTablaUsuarios");
+    var refTabla = document.getElementById("datosTablaAdministradores");
      if(refTabla){
         while (refTabla.rows.length>0){
             refTabla.deleteRow(0);
@@ -23,7 +23,7 @@ function solicitarTabla(textoJSON){
             td = tr.insertCell(-1);
             td.innerText = tabla.datos[i].nombre;
             td = tr.insertCell(-1);
-            td.innerText = tabla.datos[i].estado;
+            td.innerText = tabla.datos[i].usuario;
         }
     }
 }
