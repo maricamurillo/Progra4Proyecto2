@@ -20,9 +20,9 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-@WebServlet(name = "ServicioRegistroVotantes", urlPatterns = {"/ServicioRegistroVotantes"})
+@WebServlet(name = "ServicioRegistroUsuarios", urlPatterns = {"/ServicioRegistroUsuarios"})
 @MultipartConfig()
-public class ServicioRegistroVotantes extends HttpServlet {
+public class ServicioRegistroUsuarios extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,7 +40,7 @@ public class ServicioRegistroVotantes extends HttpServlet {
             throws ServletException, IOException, InstantiationException, ClassNotFoundException, IllegalAccessException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
 
-        List<Usuario> votantes = new ArrayList<>();
+        List<Usuario> usuarios = new ArrayList<>();
 
         try {
             for (Part part : request.getParts()) {
@@ -55,18 +55,18 @@ public class ServicioRegistroVotantes extends HttpServlet {
                 InputStreamReader input = new InputStreamReader(part.getInputStream());
                 CSVParser csvParser = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(input);
                 for (CSVRecord record : csvParser) {
-                    votantes.add(new Usuario(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), 0));
+                    usuarios.add(new Usuario(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), 0));
                 }
                 
-                GestorDatos.obtenerInstancia().insertarUsuarios(votantes);
-                getServletContext().getRequestDispatcher("/registrarVotantes.jsp?status=1").forward(request, response);
+                GestorDatos.obtenerInstancia().insertarUsuarios(usuarios);
+                getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=1").forward(request, response);
             }
         } catch (IOException | ServletException ex) {
             request.setAttribute("mensaje",
                     String.format("Ocurrió una excepción: '%s'", ex.getMessage()));
         }
 
-        getServletContext().getRequestDispatcher("/registrarVotantes.jsp?status=2").forward(request, response);
+        getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=2").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -84,13 +84,13 @@ public class ServicioRegistroVotantes extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -108,13 +108,13 @@ public class ServicioRegistroVotantes extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ServicioRegistroVotantes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServicioRegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -15,10 +15,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
-        <title>Registro de Votantes</title>
+        <script src="js/loadJSON.js" type="text/javascript"></script>
+        <script src="js/scriptUsuarios.js" type="text/javascript"></script>
+        <title>Registro de Usuarios</title>
     </head>
-    <body>
-        <header><%@include file="header.jsp" %></header>
+    <body onload="initUsuarios()">
+        <header>
+            <%@include file="header.jsp" %>
+        </header>
         <%
             System.out.println("className.methodName()");
             int status = 0;
@@ -43,13 +47,29 @@
         %>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
-            <form id="form1" action="ServicioRegistroVotantes" method="POST" enctype="multipart/form-data">
+            <form id="form1" action="ServicioRegistroUsuarios" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
-                    <thead><h3>Seleccionar archivo de votantes</h3></thead>
+                    <thead><h3>Seleccionar archivo de usuarios</h3></thead>
                     ${formulario:campoArchivo("Archivo","archivo")}
                     <tr><td colspan="2"><button type="submit">Enviar</button></td></tr>
                 </table>
             </form>
+        </div>
+        <div id="contents">
+            <table id="tablaUsuarios">
+                <thead>
+                    <tr>
+                        <td colspan="4"><h3>Listado de Usuarios</h3></td>
+                    </tr>
+                    <tr>
+                        <td>Cedula</td>
+                        <td>Apellidos</td>
+                        <td>Nombre</td>
+                        <td>Estado</td>
+                    </tr>
+                </thead>
+                <tbody id="datosTablaUsuarios"></tbody>
+            </table>
         </div>
         <script>
             var close = document.getElementsByClassName("closebtn");

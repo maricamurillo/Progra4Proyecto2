@@ -16,6 +16,8 @@ import modelo.entidades.Partido;
 import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
 import modelo.entidades.VotacionPartido;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GestorDatos {
 
@@ -87,7 +89,7 @@ public class GestorDatos {
     public List<Votacion> listarVotaciones(String estados) throws SQLException {
         List<Votacion> lista = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
-        try (PreparedStatement stm = cnx.prepareStatement(CMD_VOTACIO_ESTADO)) {
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_VOTACION_ESTADO)) {
             stm.clearParameters();
             stm.setString(1, estados);
             ResultSet rs = stm.executeQuery();
@@ -105,7 +107,6 @@ public class GestorDatos {
         }
 
         return lista;
-
     }
 
     public boolean cambiarClave(String id, String clave) {
@@ -205,7 +206,7 @@ public class GestorDatos {
     public boolean insertarUsuario(Usuario usuario) {
         try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
                 PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_USUARIO)) {
-            
+
             statement.setString(1, usuario.getCedula());
             statement.setString(2, usuario.getNombre());
             statement.setString(3, usuario.getApellido1());
@@ -244,11 +245,11 @@ public class GestorDatos {
         }
         return false;
     }
-    
+
     public boolean insertarAdministrador(Administrador administrador) {
         try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
                 PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_ADMINISTRADOR)) {
-            
+
             statement.setString(1, administrador.getCedula());
             statement.setString(2, administrador.getNombre());
             statement.setString(3, administrador.getApellido1());
@@ -265,6 +266,43 @@ public class GestorDatos {
             }
         }
         return false;
+    }
+
+    public List<Usuario> listarUsuarios() throws SQLException {
+        List<Usuario> usuarios = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_USUARIOS)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                usuarios.add(new Usuario(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), "", rs.getInt("activo")));
+            }
+        }
+
+        return usuarios;
+    }
+    
+    public JSONObject obtenerTablaUsuarios() throws SQLException{
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Usuario> usuarios = listarUsuarios();
+        
+        for (Usuario usuario : usuarios) {
+            JSONObject j = new JSONObject();
+            j.put("cedula", usuario.getCedula());
+            j.put("apellidos", usuario.getApellido1() + " " + usuario.getApellido2());
+            j.put("nombre", usuario.getNombre());
+            if (usuario.getEstado() == 1) {
+                j.put("estado", "Activo");
+            }
+            else{
+                j.put("estado", "Inactivo");
+            }
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
     }
 
     private static GestorDatos instancia = null;
@@ -287,7 +325,7 @@ public class GestorDatos {
     private static final String CMD_VERIFICAR_ADMINISTRADOR = "SELECT cedula\n"
             + "FROM administrador\n"
             + "WHERE usuario = ? AND clave= ?;";
-    private static final String CMD_VOTACIO_ESTADO = "SELECT id_votacion\n"
+    private static final String CMD_VOTACION_ESTADO = "SELECT id_votacion\n"
             + "FROM votacion\n"
             + "WHERE estado=?";
     private static final String CMD_CAMBIAR_CLAVE
@@ -309,4 +347,7 @@ public class GestorDatos {
     private static final String CMD_INSERTAR_ADMINISTRADOR = "INSERT INTO ADMINISTRADOR\n"
             + "(cedula, nombre, apellido1, apellido2, usuario, clave)\n"
             + "VALUES (?,?,?,?,?,?)";
+    private static final String CMD_LISTAR_USUARIOS = "SELECT cedula, apellido1, apellido2, nombre, activo\n"
+            + "FROM bd_votaciones.usuario\n"
+            + "ORDER BY apellido1, apellido2 ASC";
 }

@@ -1,5 +1,5 @@
 <%--
-    registrarPartidos.jsp
+    registrarVotacion.jsp
 
     EIF209 - Programación 4 – Proyecto #2
     Junio 2019

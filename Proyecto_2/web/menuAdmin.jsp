@@ -16,8 +16,8 @@
     <table>
         <tr>
             <td>
-                <form action="registrarVotantes" method="POST">
-                    ${formulario:campoBoton("Registrar votantes","botonRegistraVotantes","0")}
+                <form action="registrarUsuarios" method="POST">
+                    ${formulario:campoBoton("Registrar usuarios","botonRegistraUsuarios","0")}
                 </form>
             </td>
             <td>
