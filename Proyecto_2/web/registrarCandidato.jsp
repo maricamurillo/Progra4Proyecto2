@@ -15,9 +15,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
+        <script src="js/loadJSON.js" type="text/javascript"></script>
+        <script src="js/scriptCandidatos.js" type="text/javascript"></script>
         <title>Registro de Candidato</title>
     </head>
-    <body>
+    <body onload="init()">
         <header><%@include file="header.jsp" %></header>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
@@ -45,7 +47,7 @@
             }
         %>
         <div>
-            <form id="registroPartido" action="ServicioRegistroCandidatos" method="POST" enctype="multipart/form-data">
+            <form id="registroCandidato" action="ServicioRegistroCandidatos" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
                     <thead><h3>Datos del Candidato</h3></thead>
                     ${formulario:campoEtiquetado("Cedula","cedula","0")}
@@ -58,6 +60,24 @@
                 </table>
                 ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
+        </div>
+        <div id="contents">
+            <table id="tablaCandidatos">
+                <thead>
+                    <tr>
+                        <td colspan="6"><h3>Listado de Candidatos</h3></td>
+                    </tr>
+                    <tr>
+                        <td>Cedula</td>
+                        <td>Apellidos</td>
+                        <td>Nombre</td>
+                        <td>Estado</td>
+                        <td>Foto</td>
+                        <td>Partido</td>
+                    </tr>
+                </thead>
+                <tbody id="datosTablaCandidatos"></tbody>
+            </table>
         </div>
         <script>
             var close = document.getElementsByClassName("closebtn");

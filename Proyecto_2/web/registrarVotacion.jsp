@@ -49,7 +49,7 @@
             }
         %>
         <div>
-            <form id="registroPartido" action="ServicioRegistroVotaciones" method="POST">
+            <form id="registroVotacion" action="ServicioRegistroVotaciones" method="POST">
                 <table class="tablaFormulario">
                     <thead><h3>Datos de Votacion</h3></thead>
                     ${formulario:campoFecha("Fecha Inicio","fechaInicio")}

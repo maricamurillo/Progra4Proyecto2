@@ -47,7 +47,7 @@
             }
         %>
         <div>
-            <form id="registroPartido" action="ServicioRegistroAdministradores" method="POST">
+            <form id="registroAdministrador" action="ServicioRegistroAdministradores" method="POST">
                 <table class="tablaFormulario">
                     <thead><h3>Datos del Administrador</h3></thead>
                     ${formulario:campoEtiquetado("Cedula","cedula","0")}

@@ -41,6 +41,12 @@ public class ServicioListados extends HttpServlet {
                 case "administradores":
                     out.println(GestorDatos.obtenerInstancia().obtenerTablaAdministradores());
                     break;
+                case "partidos":
+                    out.println(GestorDatos.obtenerInstancia().obtenerTablaPartidos());
+                    break;
+                case "candidatos":
+                    out.println(GestorDatos.obtenerInstancia().obtenerTablaCandidatos());
+                    break;
             }
         }
     }

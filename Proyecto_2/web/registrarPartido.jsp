@@ -15,9 +15,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
+        <script src="js/loadJSON.js" type="text/javascript"></script>
+        <script src="js/scriptPartidos.js" type="text/javascript"></script>
         <title>Registro de Partidos</title>
     </head>
-    <body>
+    <body onload="init()">
         <header><%@include file="header.jsp" %></header>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
@@ -55,6 +57,22 @@
                 </table>
                 ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
+        </div>
+        <div id="contents">
+            <table id="tablaPartidos">
+                <thead>
+                    <tr>
+                        <td colspan="4"><h3>Listado de Partidos</h3></td>
+                    </tr>
+                    <tr>
+                        <td>Siglas</td>
+                        <td>Nombre</td>
+                        <td>Bandera</td>
+                        <td>Observaciones</td>
+                    </tr>
+                </thead>
+                <tbody id="datosTablaPartidos"></tbody>
+            </table>
         </div>
         <script>
             var close = document.getElementsByClassName("closebtn");

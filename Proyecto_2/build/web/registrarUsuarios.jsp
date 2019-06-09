@@ -47,7 +47,7 @@
         %>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
-            <form id="form1" action="ServicioRegistroUsuarios" method="POST" enctype="multipart/form-data">
+            <form id="registroUsuario" action="ServicioRegistroUsuarios" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
                     <thead><h3>Seleccionar archivo de usuarios</h3></thead>
                     ${formulario:campoArchivo("Archivo","archivo")}

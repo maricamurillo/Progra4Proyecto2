@@ -374,6 +374,83 @@ public class GestorDatos {
         r.put("datos", a);
         return r;
     }
+    
+    public List<Partido> listarPartidos() throws SQLException {
+        List<Partido> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_PARTIDOS)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                datos.add(new Partido(rs.getString("siglas"), rs.getString("nombre"), "", "", rs.getString("observaciones")));
+            }
+        }
+
+        return datos;
+    }
+    
+    public JSONObject obtenerTablaPartidos() throws SQLException{
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Partido> datos = listarPartidos();
+        
+        for (Partido dato : datos) {
+            JSONObject j = new JSONObject();
+            j.put("siglas", dato.getSiglas());
+            j.put("nombre", dato.getNombre());
+            j.put("bandera", dato.getBandera());
+            j.put("observaciones", dato.getObservaciones());
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
+    
+    public List<VotacionPartido> listarCandidatos() throws SQLException {
+        List<VotacionPartido> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_CANDIDATOS)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                
+                VotacionPartido votacionPartido = new VotacionPartido();
+                Usuario candidato = new Usuario(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), "", rs.getInt("activo"));
+                Partido partido = new Partido(rs.getString("siglas"), rs.getString("nombre_partido"), "", "", "");
+                votacionPartido.setCandidato(candidato);
+                votacionPartido.setPartido(partido);
+                datos.add(votacionPartido);
+            }
+        }
+
+        return datos;
+    }
+    
+    public JSONObject obtenerTablaCandidatos() throws SQLException{
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<VotacionPartido> datos = listarCandidatos();
+        
+        for (VotacionPartido dato : datos) {
+            JSONObject j = new JSONObject();
+            j.put("cedula", dato.getCandidato().getCedula());
+            j.put("apellidos", dato.getCandidato().getApellido1() + " " + dato.getCandidato().getApellido2());
+            j.put("nombre", dato.getCandidato().getNombre());
+            if (dato.getCandidato().getEstado() == 1) {
+                j.put("estado", "Activo");
+            }
+            else{
+                j.put("estado", "Inactivo");
+            }
+            j.put("foto", dato.getFotoCandidato());
+            j.put("partido", dato.getPartido().getSiglas() + " - " + dato.getPartido().getNombre());
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
 
     private static GestorDatos instancia = null;
     private DBManager db = null;
@@ -425,5 +502,15 @@ public class GestorDatos {
             + "ORDER BY fecha_inicio";
     private static final String CMD_LISTAR_ADMINISTRADORES = "SELECT cedula, apellido1, apellido2, nombre, usuario\n"
             + "FROM bd_votaciones.administrador\n"
-            + "ORDER BY apellido1, apellido2 ASC";
+            + "ORDER BY apellido1, apellido2";
+    private static final String CMD_LISTAR_PARTIDOS = "SELECT siglas, nombre, bandera, tipo_imagen, observaciones\n"
+            + "FROM bd_votaciones.partido\n"
+            + "ORDER BY siglas";
+    private static final String CMD_LISTAR_CANDIDATOS = "SELECT u.cedula, u.apellido1, u.apellido2, u.nombre, u.activo, \n"
+            + "vp.foto_candidato, vp.tipo_imagen, p.siglas, p.nombre nombre_partido\n"
+            + "FROM bd_votaciones.usuario u\n"
+            + "INNER JOIN bd_votaciones.votacion_partido vp\n"
+            + "ON vp.cedula_candidato = u.cedula\n"
+            + "INNER JOIN bd_votaciones.partido p\n"
+            + "ON p.siglas = vp.partido_siglas\n";
 }
