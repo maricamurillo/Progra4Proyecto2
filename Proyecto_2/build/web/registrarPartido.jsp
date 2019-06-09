@@ -49,13 +49,17 @@
         <div>
             <form id="registroPartido" action="ServicioRegistroPartidos" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
-                    <thead><h3>Datos del Partido</h3></thead>
-                    ${formulario:campoEtiquetado("Nombre","nombre","0")}
-                    ${formulario:campoEtiquetado("Siglas","siglas","0")}
-                    ${formulario:campoArchivo("Bandera","bandera")}
-                    ${formulario:campoTextarea("Observaciones","observaciones","4", "50")}
+                    <thead>
+                        <tr>
+                            <td colspan="2"><h3>Agregar Partido</h3></td>
+                        </tr>    
+                    </thead>
+                    ${formulario:campoEtiquetado("Nombre:","nombre","0")}
+                    ${formulario:campoEtiquetado("Siglas:","siglas","0")}
+                    ${formulario:campoArchivo("Bandera:","bandera")}
+                    ${formulario:campoTextarea("Observaciones:","observaciones","4", "50")}
+                    <tr><td colspan="2"><button type="submit">Guardar</button></td></tr>
                 </table>
-                ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
         </div>
         <div id="contents">

@@ -49,14 +49,18 @@
         <div>
             <form id="registroAdministrador" action="ServicioRegistroAdministradores" method="POST">
                 <table class="tablaFormulario">
-                    <thead><h3>Datos del Administrador</h3></thead>
-                    ${formulario:campoEtiquetado("Cedula","cedula","0")}
-                    ${formulario:campoEtiquetado("Nombre","nombre","0")}
-                    ${formulario:campoEtiquetado("Primer apellido","apellido1","0")}
-                    ${formulario:campoEtiquetado("Segundo apellido","apellido2","0")}
-                    ${formulario:campoEtiquetado("Usuario","usuario","0")}
+                    <thead>
+                        <tr>
+                            <td colspan="2"><h3>Agregar Administrador</h3></td>
+                        </tr>    
+                    </thead>
+                    ${formulario:campoEtiquetado("Cedula:","cedula","0")}
+                    ${formulario:campoEtiquetado("Nombre:","nombre","0")}
+                    ${formulario:campoEtiquetado("Primer apellido:","apellido1","0")}
+                    ${formulario:campoEtiquetado("Segundo apellido:","apellido2","0")}
+                    ${formulario:campoEtiquetado("Usuario:","usuario","0")}
+                    <tr><td colspan="2"><button type="submit">Guardar</button></td></tr>
                 </table>
-                ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
         </div>
         <div id="contents">

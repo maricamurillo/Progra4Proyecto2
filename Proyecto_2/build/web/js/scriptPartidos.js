@@ -21,7 +21,7 @@ function solicitarTabla(textoJSON){
             td = tr.insertCell(-1);
             td.innerText = tabla.datos[i].nombre;
             td = tr.insertCell(-1);
-            td.innerText = tabla.datos[i].bandera;
+            td.innerHTML = "<img src=\"ServicioProveedorImagen?siglas_partido=" + tabla.datos[i].siglas + "\" width=\"100\" height=\"100\" />";
             td = tr.insertCell(-1);
             td.innerText = tabla.datos[i].observaciones;
         }

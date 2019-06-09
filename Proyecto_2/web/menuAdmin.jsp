@@ -17,27 +17,27 @@
         <tr>
             <td>
                 <form action="registrarUsuarios" method="POST">
-                    ${formulario:campoBoton("Registrar usuarios","botonRegistraUsuarios","0")}
+                    ${formulario:campoBoton("Usuarios","botonRegistraUsuarios","0")}
                 </form>
             </td>
             <td>
                 <form action="registrarPartidos" method="POST">
-                    ${formulario:campoBoton("Registrar partidos","botonRegistrarPartidos","0")}
+                    ${formulario:campoBoton("Partidos","botonRegistrarPartidos","0")}
                 </form>
             </td>
             <td>
                 <form action="registrarVotaciones" method="POST">
-                    ${formulario:campoBoton("Registrar votaciones","botonRegistrarVotaciones","0")}
+                    ${formulario:campoBoton("Votaciones","botonRegistrarVotaciones","0")}
                 </form>
             </td>
             <td>
                 <form action="registrarCandidatos" method="POST">
-                    ${formulario:campoBoton("Registrar candidatos","botonRegistrarCandidatos","0")}
+                    ${formulario:campoBoton("Candidatos","botonRegistrarCandidatos","0")}
                 </form>
             </td>
             <td>
                 <form action="registrarAdministradores" method="POST">
-                    ${formulario:campoBoton("Registrar administradores","botonRegistrarAdministradores","0")}
+                    ${formulario:campoBoton("Administradores","botonRegistrarAdministradores","0")}
                 </form>
             </td>
             <td>

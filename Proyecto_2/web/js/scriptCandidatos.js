@@ -26,7 +26,7 @@ function solicitarTabla(textoJSON){
             td = tr.insertCell(-1);
             td.innerText = tabla.datos[i].estado;
             td = tr.insertCell(-1);
-            td.innerText = tabla.datos[i].foto;
+            td.innerHTML = "<img src=\"ServicioProveedorImagen?cedula_candidato=" + tabla.datos[i].cedula + "\" width=\"100\" height=\"100\" />";
             td = tr.insertCell(-1);
             td.innerText = tabla.datos[i].partido;
         }

@@ -49,9 +49,13 @@
             <%@include file="menuAdmin.jsp" %>
             <form id="registroUsuario" action="ServicioRegistroUsuarios" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
-                    <thead><h3>Seleccionar archivo de usuarios</h3></thead>
-                    ${formulario:campoArchivo("Archivo","archivo")}
-                    <tr><td colspan="2"><button type="submit">Enviar</button></td></tr>
+                    <thead>
+                        <tr>
+                            <td colspan="2"><h3>Agregar Usuarios</h3></td>
+                        </tr>    
+                    </thead>
+                    ${formulario:campoArchivo("Seleccione archivo:","archivo")}
+                    <tr><td colspan="2"><button type="submit">Guardar</button></td></tr>
                 </table>
             </form>
         </div>

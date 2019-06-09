@@ -17,7 +17,7 @@
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
         <script src="js/loadJSON.js" type="text/javascript"></script>
         <script src="js/scriptCandidatos.js" type="text/javascript"></script>
-        <title>Registro de Candidato</title>
+        <title>Registro de Candidatos</title>
     </head>
     <body onload="init()">
         <header><%@include file="header.jsp" %></header>
@@ -49,16 +49,20 @@
         <div>
             <form id="registroCandidato" action="ServicioRegistroCandidatos" method="POST" enctype="multipart/form-data">
                 <table class="tablaFormulario">
-                    <thead><h3>Datos del Candidato</h3></thead>
-                    ${formulario:campoEtiquetado("Cedula","cedula","0")}
-                    ${formulario:campoEtiquetado("Nombre","nombre","0")}
-                    ${formulario:campoEtiquetado("Primer apellido","apellido1","0")}
-                    ${formulario:campoEtiquetado("Segundo apellido","apellido2","0")}
-                    ${formulario:campoArchivo("Foto","foto")}
-                    ${formulario:campoEtiquetado("Partido","partido","0")}
-                    ${formulario:campoEtiquetado("Votacion","votacion","0")}
+                    <thead>
+                        <tr>
+                            <td colspan="2"><h3>Agregar Candidato</h3></td>
+                        </tr>    
+                    </thead>
+                    ${formulario:campoEtiquetado("Cedula:","cedula","0")}
+                    ${formulario:campoEtiquetado("Nombre:","nombre","0")}
+                    ${formulario:campoEtiquetado("Primer apellido:","apellido1","0")}
+                    ${formulario:campoEtiquetado("Segundo apellido:","apellido2","0")}
+                    ${formulario:campoArchivo("Foto:","foto")}
+                    ${formulario:campoEtiquetado("Partido:","partido","0")}
+                    ${formulario:campoEtiquetado("Votacion:","votacion","0")}
+                    <tr><td colspan="2"><button type="submit">Guardar</button></td></tr>
                 </table>
-                ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
         </div>
         <div id="contents">

@@ -1,7 +1,9 @@
 package modelo.gestor;
 
 import cr.ac.database.managers.DBManager;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,11 +13,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletResponse;
 import modelo.entidades.Administrador;
 import modelo.entidades.Partido;
 import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
 import modelo.entidades.VotacionPartido;
+import modelo.entidades.IOUtilities;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -282,12 +286,12 @@ public class GestorDatos {
 
         return datos;
     }
-    
-    public JSONObject obtenerTablaUsuarios() throws SQLException{
+
+    public JSONObject obtenerTablaUsuarios() throws SQLException {
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<Usuario> datos = listarUsuarios();
-        
+
         for (Usuario dato : datos) {
             JSONObject j = new JSONObject();
             j.put("cedula", dato.getCedula());
@@ -295,8 +299,7 @@ public class GestorDatos {
             j.put("nombre", dato.getNombre());
             if (dato.getEstado() == 1) {
                 j.put("estado", "Activo");
-            }
-            else{
+            } else {
                 j.put("estado", "Inactivo");
             }
             a.put(j);
@@ -304,7 +307,7 @@ public class GestorDatos {
         r.put("datos", a);
         return r;
     }
-    
+
     public List<Votacion> listarVotaciones() throws SQLException {
         List<Votacion> datos = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
@@ -319,12 +322,12 @@ public class GestorDatos {
 
         return datos;
     }
-    
-    public JSONObject obtenerTablaVotaciones() throws SQLException{
+
+    public JSONObject obtenerTablaVotaciones() throws SQLException {
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<Votacion> datos = listarVotaciones();
-        
+
         for (Votacion dato : datos) {
             JSONObject j = new JSONObject();
             j.put("fecha_inicio", dato.getFechaInicio());
@@ -333,8 +336,7 @@ public class GestorDatos {
             j.put("fecha_final", dato.getFechaFinal());
             if (dato.getEstado() == 1) {
                 j.put("estado", "Activa");
-            }
-            else{
+            } else {
                 j.put("estado", "Inactiva");
             }
             a.put(j);
@@ -342,7 +344,7 @@ public class GestorDatos {
         r.put("datos", a);
         return r;
     }
-    
+
     public List<Administrador> listarAdministradores() throws SQLException {
         List<Administrador> datos = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
@@ -357,12 +359,12 @@ public class GestorDatos {
 
         return datos;
     }
-    
-    public JSONObject obtenerTablaAdministradores() throws SQLException{
+
+    public JSONObject obtenerTablaAdministradores() throws SQLException {
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<Administrador> datos = listarAdministradores();
-        
+
         for (Administrador dato : datos) {
             JSONObject j = new JSONObject();
             j.put("cedula", dato.getCedula());
@@ -374,7 +376,7 @@ public class GestorDatos {
         r.put("datos", a);
         return r;
     }
-    
+
     public List<Partido> listarPartidos() throws SQLException {
         List<Partido> datos = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
@@ -389,12 +391,12 @@ public class GestorDatos {
 
         return datos;
     }
-    
-    public JSONObject obtenerTablaPartidos() throws SQLException{
+
+    public JSONObject obtenerTablaPartidos() throws SQLException {
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<Partido> datos = listarPartidos();
-        
+
         for (Partido dato : datos) {
             JSONObject j = new JSONObject();
             j.put("siglas", dato.getSiglas());
@@ -406,7 +408,7 @@ public class GestorDatos {
         r.put("datos", a);
         return r;
     }
-    
+
     public List<VotacionPartido> listarCandidatos() throws SQLException {
         List<VotacionPartido> datos = new ArrayList<>();
         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
@@ -415,7 +417,7 @@ public class GestorDatos {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                
+
                 VotacionPartido votacionPartido = new VotacionPartido();
                 Usuario candidato = new Usuario(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), "", rs.getInt("activo"));
                 Partido partido = new Partido(rs.getString("siglas"), rs.getString("nombre_partido"), "", "", "");
@@ -427,12 +429,12 @@ public class GestorDatos {
 
         return datos;
     }
-    
-    public JSONObject obtenerTablaCandidatos() throws SQLException{
+
+    public JSONObject obtenerTablaCandidatos() throws SQLException {
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<VotacionPartido> datos = listarCandidatos();
-        
+
         for (VotacionPartido dato : datos) {
             JSONObject j = new JSONObject();
             j.put("cedula", dato.getCandidato().getCedula());
@@ -440,8 +442,7 @@ public class GestorDatos {
             j.put("nombre", dato.getCandidato().getNombre());
             if (dato.getCandidato().getEstado() == 1) {
                 j.put("estado", "Activo");
-            }
-            else{
+            } else {
                 j.put("estado", "Inactivo");
             }
             j.put("foto", dato.getFotoCandidato());
@@ -450,6 +451,34 @@ public class GestorDatos {
         }
         r.put("datos", a);
         return r;
+    }
+
+    public void cargarFotoCandidato(HttpServletResponse response, String cedulaCandidato) throws IOException, SQLException {
+
+        try (OutputStream out = response.getOutputStream();
+                Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement stm = cnx.prepareCall(CMD_OBTENER_FOTO_CANDIDATO)) {
+            stm.setString(1, cedulaCandidato);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                response.setContentType(rs.getString("tipo_imagen"));
+                IOUtilities.copy(rs.getBinaryStream(1), out);
+            }
+        }
+    }
+    
+    public void cargarBanderaPartido(HttpServletResponse response, String siglasPartido) throws IOException, SQLException {
+
+        try (OutputStream out = response.getOutputStream();
+                Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement stm = cnx.prepareCall(CMD_OBTENER_BANDERA_PARTIDO)) {
+            stm.setString(1, siglasPartido);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                response.setContentType(rs.getString("tipo_imagen"));
+                IOUtilities.copy(rs.getBinaryStream(1), out);
+            }
+        }
     }
 
     private static GestorDatos instancia = null;
@@ -513,4 +542,10 @@ public class GestorDatos {
             + "ON vp.cedula_candidato = u.cedula\n"
             + "INNER JOIN bd_votaciones.partido p\n"
             + "ON p.siglas = vp.partido_siglas\n";
+    private static final String CMD_OBTENER_FOTO_CANDIDATO = "SELECT foto_candidato, tipo_imagen\n"
+            + "FROM bd_votaciones.votacion_partido\n"
+            + "WHERE cedula_candidato = ?";
+    private static final String CMD_OBTENER_BANDERA_PARTIDO = "SELECT bandera, tipo_imagen\n"
+            + "FROM bd_votaciones.partido\n"
+            + "WHERE siglas = ?";
 }

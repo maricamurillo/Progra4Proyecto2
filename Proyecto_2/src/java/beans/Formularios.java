@@ -21,11 +21,11 @@ public class Formularios implements Serializable {
         contenidos.append(String.format("<td class=\"etiqueta\">%s</td>", etiqueta));
         contenidos.append("<td class=\"campo\">");
         if ("1".equals(clave)) {
-            contenidos.append(String.format("<input type=\"password\" required id=\"%1$s\" name=\"%1$s\" size=\"30\" />", id));
+            contenidos.append(String.format("<input type=\"password\" required id=\"%1$s\" name=\"%1$s\" size=\"50\" />", id));
         } else if ("2".equals(clave)) {
             contenidos.append(String.format("<p>%s</p>", id));
         } else {
-            contenidos.append(String.format("<input type=\"text\" id=\"%1$s\" name=\"%1$s\" size=\"30\" />", id));
+            contenidos.append(String.format("<input type=\"text\" id=\"%1$s\" name=\"%1$s\" size=\"50\" placeholder=\"%1$s\" />", id, etiqueta));
         }
         contenidos.append("</td>");
         contenidos.append("</tr>");

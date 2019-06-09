@@ -17,7 +17,7 @@
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
         <script src="js/loadJSON.js" type="text/javascript"></script>
         <script src="js/scriptVotaciones.js" type="text/javascript"></script>
-        <title>Registro de Votacion</title>
+        <title>Registro de Votaciones</title>
     </head>
     <body onload="init()">
         <header>
@@ -51,13 +51,17 @@
         <div>
             <form id="registroVotacion" action="ServicioRegistroVotaciones" method="POST">
                 <table class="tablaFormulario">
-                    <thead><h3>Datos de Votacion</h3></thead>
+                    <thead>
+                        <tr>
+                            <td colspan="2"><h3>Agregar Votacion</h3></td>
+                        </tr>    
+                    </thead>
                     ${formulario:campoFecha("Fecha Inicio","fechaInicio")}
                     ${formulario:campoFecha("Fecha Apertura","fechaApertura")}
                     ${formulario:campoFecha("Fecha Cierre","fechaCierre")}
                     ${formulario:campoFecha("Fecha Final","fechaFinal")}
+                    <tr><td colspan="2"><button type="submit">Guardar</button></td></tr>
                 </table>
-                ${formulario:campoBoton("Registar","botonRegistro","0")}
             </form>
         </div>
         <div id="contents">
