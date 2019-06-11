@@ -27,7 +27,6 @@
             <%@include file="menuAdmin.jsp" %>
         </div>
         <%
-            System.out.println("className.methodName()");
             int status = 0;
             try {
                 status = Integer.parseInt(request.getParameter("status"));
