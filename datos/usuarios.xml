@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<usuarios>
+	<usuario>
+		<cedula>111111111</cedula>
+		<nombre>Juan</nombre>
+		<apellido1>Perez</apellido1>
+		<apellido2>Perez</apellido2>
+    <clave>111111111</clave>
+	</usuario>
+	<usuario>
+    <cedula>222222222</cedula>
+		<nombre>Ana</nombre>
+		<apellido1>Fernandez</apellido1>
+		<apellido2>Fernandez</apellido2>
+    <clave>222222222</clave>
+	</usuario>
+  <usuario>
+    <cedula>333333333</cedula>
+		<nombre>Pedro</nombre>
+		<apellido1>Rodriguez</apellido1>
+		<apellido2>Rodriguez</apellido2>
+    <clave>333333333</clave>
+	</usuario>
+</usuarios>

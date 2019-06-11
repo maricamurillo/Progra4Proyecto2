@@ -42,6 +42,14 @@
                         r.append("Ocurrio un error durante la carga del archivo.");
                         out.println(String.format("<div class=\"alert\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
                         break;
+                    case 3:
+                        r.append("No se selecciono ningun archivo.");
+                        out.println(String.format("<div class=\"alert\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
+                        break;
+                    case 4:
+                        r.append("El formato del archivo seleccionado no es valido. Formatos validos: XML y CSV.");
+                        out.println(String.format("<div class=\"alert\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
+                        break;
                 }
             }
         %>

@@ -180,8 +180,13 @@ public class GestorDatos {
         return false;
     }
 
-    public static boolean validarFormatoImagen(final String fileName) {
-        Matcher matcher = PATTERN.matcher(fileName);
+    public boolean validarFormatoImagen(final String fileName) {
+        Matcher matcher = IMAGE_PATTERN.matcher(fileName);
+        return matcher.matches();
+    }
+    
+    public boolean validarFormatoArchivo(final String fileName) {
+        Matcher matcher = FILE_PATTERN.matcher(fileName);
         return matcher.matches();
     }
 
@@ -487,8 +492,10 @@ public class GestorDatos {
     private static final String BASE_DATOS = "bd_votaciones";
     private static final String LOGIN = "root";
     private static final String PASSWORD = "admin1234";
-    private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
-    private static final Pattern PATTERN = Pattern.compile(IMAGE_PATTERN);
+    private static final String IMAGE_PATTERN_STRING = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
+    private static final String FILE_PATTERN_STRING = "([^\\s]+(\\.(?i)(csv|xml))$)";
+    private static final Pattern IMAGE_PATTERN = Pattern.compile(IMAGE_PATTERN_STRING);
+    private static final Pattern FILE_PATTERN = Pattern.compile(FILE_PATTERN_STRING);
     private static final String CMD_ESTATUS_VOTANTE = "SELECT cedula\n"
             + "FROM usuario\n"
             + "WHERE cedula = ? AND activo = 1";

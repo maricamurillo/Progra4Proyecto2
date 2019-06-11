@@ -14,11 +14,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import modelo.entidades.Usuario;
 import modelo.gestor.GestorDatos;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 @WebServlet(name = "ServicioRegistroUsuarios", urlPatterns = {"/ServicioRegistroUsuarios"})
 @MultipartConfig()
@@ -47,26 +53,60 @@ public class ServicioRegistroUsuarios extends HttpServlet {
                 String nombreArchivo = part.getSubmittedFileName();
 
                 if (nombreArchivo.isEmpty()) {
-                    request.setAttribute("mensaje",
-                            "Se omitió la selección del archivo.");
+                    getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=3").forward(request, response);
                     break;
                 }
 
-                InputStreamReader input = new InputStreamReader(part.getInputStream());
-                CSVParser csvParser = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(input);
-                for (CSVRecord record : csvParser) {
-                    usuarios.add(new Usuario(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), 0));
+                if (GestorDatos.obtenerInstancia().validarFormatoArchivo(nombreArchivo)) {
+                    try {
+                        if (part.getContentType().contains("csv")) {
+                            InputStreamReader input = new InputStreamReader(part.getInputStream());
+                            CSVParser csvParser = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(input);
+
+                            for (CSVRecord record : csvParser) {
+                                usuarios.add(new Usuario(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4), 0));
+                            }
+                        } else {
+                            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                            DocumentBuilder builder = factory.newDocumentBuilder();
+                            Document doc = builder.parse(part.getInputStream());
+                            doc.getDocumentElement().normalize();
+                            NodeList nodeList = doc.getElementsByTagName("usuario");
+                            
+                            int length = nodeList.getLength();
+
+                            for (int temp = 0; temp < nodeList.getLength(); temp++) {
+
+                                Node node = nodeList.item(temp);
+
+                                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element element = (Element) node;
+                                    usuarios.add(new Usuario(element.getElementsByTagName("cedula").item(0).getTextContent(),
+                                            element.getElementsByTagName("nombre").item(0).getTextContent(),
+                                            element.getElementsByTagName("apellido1").item(0).getTextContent(),
+                                            element.getElementsByTagName("apellido2").item(0).getTextContent(),
+                                            element.getElementsByTagName("cedula").item(0).getTextContent(),
+                                            0));
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=2").forward(request, response);
+                        break;
+                    }
+
+                    GestorDatos.obtenerInstancia().insertarUsuarios(usuarios);
+                    getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=1").forward(request, response);
+                    break;
+
+                } else {
+                    getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=4").forward(request, response);
+                    break;
                 }
-                
-                GestorDatos.obtenerInstancia().insertarUsuarios(usuarios);
-                getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=1").forward(request, response);
             }
         } catch (IOException | ServletException ex) {
-            request.setAttribute("mensaje",
-                    String.format("Ocurrió una excepción: '%s'", ex.getMessage()));
+            getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=2").forward(request, response);
         }
-
-        getServletContext().getRequestDispatcher("/registrarUsuarios.jsp?status=2").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
