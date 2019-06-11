@@ -59,17 +59,17 @@
                     ${formulario:campoEtiquetado("Primer apellido:","apellido1","0")}
                     ${formulario:campoEtiquetado("Segundo apellido:","apellido2","0")}
                     ${formulario:campoArchivo("Foto:","foto")}
-                    ${formulario:campoEtiquetado("Partido:","partido","0")}
-                    ${formulario:campoEtiquetado("Votacion:","votacion","0")}
+                    ${formulario:campoSelect("Partido:","partido")}
+                    ${formulario:campoSelect("Votacion:","votacion")}                    
                     <tr><td colspan="2"><button type="submit">Guardar</button></td></tr>
                 </table>
             </form>
         </div>
         <div id="contents">
-            <table id="tablaCandidatos">
+            <table id="tablaCandidatos" border="1">
                 <thead>
                     <tr>
-                        <td colspan="6"><h3>Listado de Candidatos</h3></td>
+                        <td colspan="7"><h3>Listado de Candidatos</h3></td>
                     </tr>
                     <tr>
                         <td>Cedula</td>
@@ -78,6 +78,7 @@
                         <td>Estado</td>
                         <td>Foto</td>
                         <td>Partido</td>
+                        <td>Votacion</td>
                     </tr>
                 </thead>
                 <tbody id="datosTablaCandidatos"></tbody>

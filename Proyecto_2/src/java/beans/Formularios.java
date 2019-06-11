@@ -78,4 +78,17 @@ public class Formularios implements Serializable {
         contenidos.append("</tr>");
         return contenidos.toString();
     }
+    
+    public static String campoSelect(String etiqueta, String id) {
+        StringBuilder contenidos = new StringBuilder();
+        contenidos.append("<tr>");
+        contenidos.append(String.format("<td class=\"etiqueta\">%s</td>", etiqueta));
+        contenidos.append("<td class=\"campo\">");
+        contenidos.append(String.format("<select required id=\"%1$s\" name=\"%1$s\">", id));
+        contenidos.append("<option disabled selected value>Seleccione</option>");
+        contenidos.append("</select>");
+        contenidos.append("</td>");
+        contenidos.append("</tr>");
+        return contenidos.toString();
+    }
 }

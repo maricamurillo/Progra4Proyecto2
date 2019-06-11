@@ -184,7 +184,7 @@ public class GestorDatos {
         Matcher matcher = IMAGE_PATTERN.matcher(fileName);
         return matcher.matches();
     }
-    
+
     public boolean validarFormatoArchivo(final String fileName) {
         Matcher matcher = FILE_PATTERN.matcher(fileName);
         return matcher.matches();
@@ -321,7 +321,7 @@ public class GestorDatos {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                datos.add(new Votacion(0, rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
+                datos.add(new Votacion(rs.getInt("id"), rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
             }
         }
 
@@ -335,6 +335,7 @@ public class GestorDatos {
 
         for (Votacion dato : datos) {
             JSONObject j = new JSONObject();
+            j.put("id", dato.getId());
             j.put("fecha_inicio", dato.getFechaInicio());
             j.put("fecha_apertura", dato.getFechaApertura());
             j.put("fecha_cierre", dato.getFechaCierre());
@@ -426,8 +427,10 @@ public class GestorDatos {
                 VotacionPartido votacionPartido = new VotacionPartido();
                 Usuario candidato = new Usuario(rs.getString("cedula"), rs.getString("nombre"), rs.getString("apellido1"), rs.getString("apellido2"), "", rs.getInt("activo"));
                 Partido partido = new Partido(rs.getString("siglas"), rs.getString("nombre_partido"), "", "", "");
+                Votacion votacion = new Votacion(rs.getInt("id"), rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado"));
                 votacionPartido.setCandidato(candidato);
                 votacionPartido.setPartido(partido);
+                votacionPartido.setVotacion(votacion);
                 datos.add(votacionPartido);
             }
         }
@@ -452,6 +455,10 @@ public class GestorDatos {
             }
             j.put("foto", dato.getFotoCandidato());
             j.put("partido", dato.getPartido().getSiglas() + " - " + dato.getPartido().getNombre());
+            j.put("votacion", "Inicio " + dato.getVotacion().getFechaInicio()
+                    + " / Apertura " + dato.getVotacion().getFechaApertura()
+                    + " / Cierre " + dato.getVotacion().getFechaCierre()
+                    + " / Final " + dato.getVotacion().getFechaFinal());
             a.put(j);
         }
         r.put("datos", a);
@@ -471,7 +478,7 @@ public class GestorDatos {
             }
         }
     }
-    
+
     public void cargarBanderaPartido(HttpServletResponse response, String siglasPartido) throws IOException, SQLException {
 
         try (OutputStream out = response.getOutputStream();
@@ -533,7 +540,7 @@ public class GestorDatos {
     private static final String CMD_LISTAR_USUARIOS = "SELECT cedula, apellido1, apellido2, nombre, activo\n"
             + "FROM bd_votaciones.usuario\n"
             + "ORDER BY apellido1, apellido2 ASC";
-    private static final String CMD_LISTAR_VOTACIONES = "SELECT fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
+    private static final String CMD_LISTAR_VOTACIONES = "SELECT id, fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
             + "FROM bd_votaciones.votacion\n"
             + "ORDER BY fecha_inicio";
     private static final String CMD_LISTAR_ADMINISTRADORES = "SELECT cedula, apellido1, apellido2, nombre, usuario\n"
@@ -543,12 +550,15 @@ public class GestorDatos {
             + "FROM bd_votaciones.partido\n"
             + "ORDER BY siglas";
     private static final String CMD_LISTAR_CANDIDATOS = "SELECT u.cedula, u.apellido1, u.apellido2, u.nombre, u.activo, \n"
-            + "vp.foto_candidato, vp.tipo_imagen, p.siglas, p.nombre nombre_partido\n"
+            + "vp.foto_candidato, vp.tipo_imagen, p.siglas, p.nombre nombre_partido, \n"
+            + "v.id, v.fecha_inicio, v.fecha_apertura, v.fecha_cierre, v.fecha_final, v.estado\n"
             + "FROM bd_votaciones.usuario u\n"
             + "INNER JOIN bd_votaciones.votacion_partido vp\n"
             + "ON vp.cedula_candidato = u.cedula\n"
             + "INNER JOIN bd_votaciones.partido p\n"
-            + "ON p.siglas = vp.partido_siglas\n";
+            + "ON p.siglas = vp.partido_siglas\n"
+            + "INNER JOIN bd_votaciones.votacion v\n"
+            + "ON vp.votacion_id = v.id";
     private static final String CMD_OBTENER_FOTO_CANDIDATO = "SELECT foto_candidato, tipo_imagen\n"
             + "FROM bd_votaciones.votacion_partido\n"
             + "WHERE cedula_candidato = ?";
