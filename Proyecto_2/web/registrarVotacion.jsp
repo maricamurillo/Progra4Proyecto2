@@ -45,6 +45,10 @@
                         r.append("Ocurrio un error durante la creacion de la votacion.");
                         out.println(String.format("<div class=\"alert\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
                         break;
+                    case 3:
+                        r.append("Las fechas seleccionadas no cumplen la siguiente condicion: fecha_inicio ≤ fecha_apertura < fecha_cierre ≤ fecha_final.");
+                        out.println(String.format("<div class=\"alert\"><span class=\"closebtn\">&times;</span><strong>%s</strong></div>", r.toString()));
+                        break;
                 }
             }
         %>

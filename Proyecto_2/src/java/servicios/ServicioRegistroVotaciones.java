@@ -40,15 +40,25 @@ public class ServicioRegistroVotaciones extends HttpServlet {
         Date fechaCierre = sdf.parse(fc);
         Date fechaFinal = sdf.parse(ff);
 
-        try {
-            boolean resultado = GestorDatos.obtenerInstancia().insertarVotacion(new Votacion(0, fechaInicio, fechaApertura, fechaCierre, fechaFinal, 1));
-            if (resultado) {
-                getServletContext().getRequestDispatcher("/registrarVotacion.jsp?status=1").forward(request, response);
-            } else {
+        if ((fechaApertura.after(fechaInicio) || fechaApertura.equals(fechaInicio)) // fecha_inicio ≤ fecha_apertura
+                && (fechaCierre.after(fechaApertura)) // fecha_apertura < fecha_cierre
+                && (fechaFinal.after(fechaCierre) || fechaFinal.equals(fechaCierre))) { // fecha_cierre ≤ fecha_final
+
+            try {
+                boolean resultado = GestorDatos.obtenerInstancia().insertarVotacion(new Votacion(0, fechaInicio, fechaApertura, fechaCierre, fechaFinal, 1));
+                if (resultado) {
+                    getServletContext().getRequestDispatcher("/registrarVotacion.jsp?status=1").forward(request, response);
+                } else {
+                    getServletContext().getRequestDispatcher("/registrarVotacion.jsp?status=2").forward(request, response);
+                }
+            } catch (IOException | ServletException ex) {
                 getServletContext().getRequestDispatcher("/registrarVotacion.jsp?status=2").forward(request, response);
             }
-        } catch (IOException | ServletException ex) {
-            getServletContext().getRequestDispatcher("/registrarVotacion.jsp?status=2").forward(request, response);
+
+        }
+        
+        else{
+            getServletContext().getRequestDispatcher("/registrarVotacion.jsp?status=3").forward(request, response);
         }
     }
 
