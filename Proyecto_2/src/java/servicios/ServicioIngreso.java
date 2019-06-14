@@ -51,7 +51,8 @@ public class ServicioIngreso extends HttpServlet {
             if (usuarioValido) {
                 HttpSession sesion = request.getSession(true);
                 sesion.setAttribute("usuario", usuario);
-                sesion.setAttribute("control", 1);
+                sesion.setAttribute("control", 1); 
+                sesion.setAttribute("datosExportados", "0");
                 request.getSession(true).setMaxInactiveInterval(60 * 5);
                 response.sendRedirect("indexAdmin.jsp");
             } else {

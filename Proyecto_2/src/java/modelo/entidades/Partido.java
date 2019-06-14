@@ -1,6 +1,13 @@
 package modelo.entidades;
 
-public class Partido {
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "partido")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Partido implements Serializable {
 
     String siglas;
     String nombre;
@@ -23,7 +30,7 @@ public class Partido {
         this.tipoImagen = tipoImagen;
         this.observaciones = observaciones;
     }
-    
+
     public void setSiglas(String siglas) {
         this.siglas = siglas;
     }
@@ -31,7 +38,7 @@ public class Partido {
     public String getSiglas() {
         return this.siglas;
     }
-    
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -47,7 +54,7 @@ public class Partido {
     public String getBandera() {
         return this.bandera;
     }
-    
+
     public void setTipoImagen(String tipoImagen) {
         this.tipoImagen = tipoImagen;
     }

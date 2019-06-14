@@ -46,6 +46,16 @@
                 </form>
             </td>
             <td>
+                <form action="exportardatos" method="POST">
+                    ${formulario:campoBoton("Exportar Datos","botonExportarDatos","0")}
+                </form>
+            </td>
+            <td>
+                <form action="borrardatos" method="POST">
+                    ${formulario:campoBoton("Borrar Datos","botonBorrarDatos","0")}
+                </form>
+            </td>
+            <td>
                 <form action="salir" method="POST">
                      ${formulario:campoBoton("Cerrar sesión","botonSalir","0")}
                 </form>

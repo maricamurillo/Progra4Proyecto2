@@ -1,6 +1,13 @@
 package modelo.entidades;
 
-public class VotacionPartido {
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "votacionpartido")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class VotacionPartido implements Serializable {
 
     Votacion votacion;
     Partido partido;
@@ -26,7 +33,7 @@ public class VotacionPartido {
         this.tipoImagen = tipoImagen;
         this.votosObtenidos = votosObtenidos;
     }
-    
+
     public void setVotacion(Votacion votacion) {
         this.votacion = votacion;
     }
@@ -34,7 +41,7 @@ public class VotacionPartido {
     public Votacion getVotacion() {
         return this.votacion;
     }
-    
+
     public void setPartido(Partido partido) {
         this.partido = partido;
     }
@@ -42,7 +49,7 @@ public class VotacionPartido {
     public Partido getPartido() {
         return this.partido;
     }
-    
+
     public void setCandidato(Usuario candidato) {
         this.candidato = candidato;
     }
@@ -50,7 +57,7 @@ public class VotacionPartido {
     public Usuario getCandidato() {
         return this.candidato;
     }
-    
+
     public void setFotoCandidato(String fotoCandidato) {
         this.fotoCandidato = fotoCandidato;
     }
@@ -58,7 +65,7 @@ public class VotacionPartido {
     public String getFotoCandidato() {
         return this.fotoCandidato;
     }
-    
+
     public void setTipoImagen(String tipoImagen) {
         this.tipoImagen = tipoImagen;
     }
@@ -66,7 +73,7 @@ public class VotacionPartido {
     public String getTipoImagen() {
         return this.tipoImagen;
     }
-    
+
     public void setVotosObtenidos(int votosObtenidos) {
         this.votosObtenidos = votosObtenidos;
     }

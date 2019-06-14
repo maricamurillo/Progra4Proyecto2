@@ -1,8 +1,14 @@
 package modelo.entidades;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class Votacion {
+@XmlRootElement(name = "votacion")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Votacion implements Serializable {
 
     int id;
     Date fechaInicio;
@@ -10,7 +16,7 @@ public class Votacion {
     Date fechaCierre;
     Date fechaFinal;
     int estado;
-    
+
     public Votacion() {
         this.id = 0;
         this.fechaInicio = new Date();
@@ -28,6 +34,7 @@ public class Votacion {
         this.fechaFinal = fechaFinal;
         this.estado = estado;
     }
+
     public Date getFechaApertura() {
         return fechaApertura;
     }
@@ -43,7 +50,7 @@ public class Votacion {
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }

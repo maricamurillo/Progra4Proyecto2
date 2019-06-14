@@ -1,6 +1,13 @@
 package modelo.entidades;
 
-public class Administrador {
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "administrador")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Administrador implements Serializable {
 
     String cedula;
     String nombre;

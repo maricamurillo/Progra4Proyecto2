@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "servicioMenu", urlPatterns = {"/servicioMenu","/salir","/registrarUsuarios","/registrarPartidos","/registrarVotaciones","/registrarCandidatos","/registrarAdministradores","/reportes","/voto"})
+@WebServlet(name = "servicioMenu", urlPatterns = {"/servicioMenu","/salir","/registrarUsuarios","/registrarPartidos","/registrarVotaciones","/registrarCandidatos","/registrarAdministradores","/reportes","/voto", "/exportardatos", "/borrardatos"})
 public class ServicioMenu extends HttpServlet {
 
     /**
@@ -66,7 +66,13 @@ public class ServicioMenu extends HttpServlet {
         }
         if(request.getServletPath().equals("/voto")){
              response.sendRedirect("voto.jsp");
-        }     
+        }
+        if(request.getServletPath().equals("/exportardatos")){
+             response.sendRedirect("ServicioExportarDatos");
+        }
+        if(request.getServletPath().equals("/borrardatos")){
+             response.sendRedirect("ServicioBorrarDatos");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

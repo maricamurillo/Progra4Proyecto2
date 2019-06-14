@@ -20,6 +20,7 @@ import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
 import modelo.entidades.VotacionPartido;
 import modelo.entidades.IOUtilities;
+import modelo.entidades.VotacionUsuario;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -391,7 +392,7 @@ public class GestorDatos {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                datos.add(new Partido(rs.getString("siglas"), rs.getString("nombre"), "", "", rs.getString("observaciones")));
+                datos.add(new Partido(rs.getString("siglas"), rs.getString("nombre"), new String(rs.getBlob("bandera").getBytes(1l, (int) rs.getBlob("bandera").length())), rs.getString("tipo_imagen"), rs.getString("observaciones")));
             }
         }
 
@@ -493,6 +494,116 @@ public class GestorDatos {
         }
     }
 
+    public List<VotacionUsuario> listarVotacionUsuario() throws SQLException {
+        List<VotacionUsuario> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACION_USUARIO)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setCedula(rs.getString("usuario_cedula"));
+                Votacion votacion = new Votacion();
+                votacion.setId(rs.getInt("votacion_id"));
+                datos.add(new VotacionUsuario(votacion, usuario, rs.getInt("voto_completado")));
+            }
+        }
+
+        return datos;
+    }
+
+    public List<VotacionPartido> listarVotacionPartido() throws SQLException {
+        List<VotacionPartido> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACION_PARTIDO)) {
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Votacion votacion = new Votacion();
+                votacion.setId(rs.getInt("votacion_id"));
+                Partido partido = new Partido();
+                partido.setSiglas(rs.getString("partido_siglas"));
+                Usuario usuario = new Usuario();
+                usuario.setCedula(rs.getString("cedula_candidato"));
+                datos.add(new VotacionPartido(votacion, partido, usuario, new String(rs.getBlob("foto_candidato").getBytes(1l, (int) rs.getBlob("foto_candidato").length())), rs.getString("tipo_imagen"), rs.getInt("votos_obtenidos")));
+            }
+        }
+
+        return datos;
+    }
+    
+    public boolean borrarVotacionPartidos() {
+        try {
+            DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
+            try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                    PreparedStatement stm = cnx.prepareStatement(CMD_BORRAR_VOTACION_PARTIDOS)) {
+                stm.clearParameters();
+                return (stm.executeUpdate() == 1);
+            }
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean borrarVotacionUsuarios() {
+        try {
+            DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
+            try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                    PreparedStatement stm = cnx.prepareStatement(CMD_BORRAR_VOTACION_USUARIOS)) {
+                stm.clearParameters();
+                return (stm.executeUpdate() == 1);
+            }
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean borrarUsuarios() {
+        try {
+            DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
+            try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                    PreparedStatement stm = cnx.prepareStatement(CMD_BORRAR_USUARIOS)) {
+                stm.clearParameters();
+                return (stm.executeUpdate() == 1);
+            }
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean borrarVotaciones() {
+        try {
+            DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
+            try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                    PreparedStatement stm = cnx.prepareStatement(CMD_BORRAR_VOTACIONES)) {
+                stm.clearParameters();
+                return (stm.executeUpdate() == 1);
+            }
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean borrarPartidos() {
+        try {
+            DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
+            try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                    PreparedStatement stm = cnx.prepareStatement(CMD_BORRAR_PARTIDOS)) {
+                stm.clearParameters();
+                return (stm.executeUpdate() == 1);
+            }
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            return false;
+        }
+    }
+
     private static GestorDatos instancia = null;
     private DBManager db = null;
     private String URL_Servidor = "localhost";
@@ -565,4 +676,16 @@ public class GestorDatos {
     private static final String CMD_OBTENER_BANDERA_PARTIDO = "SELECT bandera, tipo_imagen\n"
             + "FROM bd_votaciones.partido\n"
             + "WHERE siglas = ?";
+    private static final String CMD_LISTAR_VOTACION_USUARIO = "SELECT votacion_id, usuario_cedula, voto_completado \n"
+            + "FROM bd_votaciones.votacion_usuario\n"
+            + "ORDER BY votacion_id";
+    private static final String CMD_LISTAR_VOTACION_PARTIDO = "SELECT votacion_id, partido_siglas, cedula_candidato, foto_candidato, tipo_imagen, votos_obtenidos\n"
+            + "FROM bd_votaciones.votacion_partido\n"
+            + "ORDER BY votacion_id";
+    private static final String CMD_BORRAR_VOTACION_PARTIDOS = "DELETE FROM bd_votaciones.votacion_partido";
+    private static final String CMD_BORRAR_VOTACION_USUARIOS = "DELETE FROM bd_votaciones.votacion_usuario";
+    private static final String CMD_BORRAR_USUARIOS = "DELETE FROM bd_votaciones.usuario";
+    private static final String CMD_BORRAR_VOTACIONES = "DELETE FROM bd_votaciones.votacion";
+    private static final String CMD_BORRAR_PARTIDOS = "DELETE FROM bd_votaciones.partido";
+    
 }
