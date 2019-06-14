@@ -25,8 +25,7 @@
         </header>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
-        </div>
-        <%
+             <%
             int status = 0;
             try {
                 status = Integer.parseInt(request.getParameter("status"));
@@ -97,6 +96,9 @@
                 }
             }
         </script>
-        <%@include file="footer.jsp" %>
+            <%@include file="footer.jsp" %>
+        </div>
+       
+     
     </body>
 </html>

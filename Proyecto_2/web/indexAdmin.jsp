@@ -17,14 +17,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="js/scriptLoging.js" type="text/javascript"></script>
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
+        <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
+        <link href="css/tablas.css" rel="stylesheet" type="text/css"/>
         <title>Menu</title>
     </head>
     <body>
         <header><%@include file="header.jsp" %></header>
         <div id="wrapper">
             <%@include file="menuAdmin.jsp" %>
-        </div>
-        <%
+             <%
             int status = 0;
             try {
                 status = Integer.parseInt(request.getParameter("status"));
@@ -61,5 +62,7 @@
         }
         </script>
         <%@include file="footer.jsp" %>
+        </div>
+       
     </body>
 </html>

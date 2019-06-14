@@ -15,12 +15,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
 import modelo.entidades.Administrador;
+import modelo.entidades.Fecha;
 import modelo.entidades.Partido;
 import modelo.entidades.Votacion;
 import modelo.entidades.Usuario;
 import modelo.entidades.VotacionPartido;
 import modelo.entidades.IOUtilities;
 import modelo.entidades.VotacionUsuario;
+import modelo.entidades.Votar;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -100,7 +102,7 @@ public class GestorDatos {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id_votacion");
+                int id = rs.getInt("id");
                 Date fechaInicio = rs.getDate("fecha_inicio");
                 Date fechaApertura = rs.getDate("fecha_apertura");
                 Date fechaCierre = rs.getDate("fecha_cierre");
@@ -122,7 +124,7 @@ public class GestorDatos {
                 stm.clearParameters();
                 stm.setString(1, clave);
                 stm.setString(2, id);
-                System.out.println("modelo.gestor.GestorDatos.cambiarClave()" + stm.toString());
+              
                 return (stm.executeUpdate() == 1);
             }
         } catch (InstantiationException | ClassNotFoundException | IllegalAccessException | SQLException ex) {
@@ -533,7 +535,182 @@ public class GestorDatos {
 
         return datos;
     }
+    public boolean verificarVoto(String usuario, String votacion, String voto) {
+        boolean encontrado = false;
+        try {
+            Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+            try (PreparedStatement stm = cnx.prepareStatement(CMD_VERIFICAR_VOTO)) {
+                stm.clearParameters();
+                stm.setString(1,votacion);
+                stm.setString(2,usuario);
+                stm.setString(3,voto);
+                ResultSet rs = stm.executeQuery();
+                encontrado = rs.next();
+              
+                      
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return encontrado;
+    }
+    public boolean insertarUsuarioVoto(String votacion,String usuario,int voto){
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_INSERTAR_USUARIO_VOTO)) {
+            statement.setString(1, votacion);
+            statement.setString(2, usuario);
+            statement.setInt(3, voto);
+            return (statement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;       
+    }
+    public int cantidaVoto(String votacion,String partido){
+        int x=0;
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+            PreparedStatement statement = cnx.prepareStatement(CMD_CANTIDAD_VOTOS)) {
+            statement.setString(1, votacion);
+            statement.setString(2, partido);
+            ResultSet rs = statement.executeQuery();
+             x= rs.getInt("votos");
+            
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }      
     
+        return x;
+    }
+
+    public boolean actualizaVoto(String votacion,String partido){
+        int x = cantidaVoto(votacion, partido);
+        x++;
+        
+         try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_ACTULIAZA_VOTO)) {
+            statement.setInt(1, x);
+            statement.setString(2, votacion);
+            statement.setString(3, partido);
+            return (statement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;       
+    }
+    public List<Votacion> listarVotacionesApertura(String fecha) throws SQLException {
+        List<Votacion> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACIONES_FECHA_APERTURA)) {
+            stm.setString(1, fecha);
+            stm.setString(2, fecha);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                datos.add(new Votacion(rs.getInt("id"), rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
+            }
+        }
+        return datos;
+    }
+    public List<Votacion> listarVotacionesCierre(String fecha) throws SQLException {
+        List<Votacion> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACIONES_FECHA_CIERRE)) {
+            stm.setString(1, fecha);
+            stm.setString(2, fecha);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                datos.add(new Votacion(rs.getInt("id"), rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
+            }
+        }
+        return datos;
+    }
+     public List<Votacion> listarVotacionesFinal(String fecha) throws SQLException {
+        List<Votacion> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACIONES_FECHA_FINAL)) {
+            stm.setString(1, fecha);
+            ResultSet rs = stm.executeQuery();
+           
+            while (rs.next()) {
+                datos.add(new Votacion(rs.getInt("id"), rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
+            }
+        }
+        return datos;
+    }
+     public boolean actualizaVotacion(String votacion ,int estado){
+         try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+                PreparedStatement statement = cnx.prepareStatement(CMD_ACTULIAZA_VOTACION)) {
+            statement.setInt(2, estado);
+            statement.setString(1, votacion);
+      
+            return (statement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }
+        return false;       
+    }
+    public String controlFecha() throws SQLException{
+        Fecha actual = new Fecha();
+        String f =actual.getStrDateFormat();
+        List<Votacion> apertura = listarVotacionesApertura(f);
+        List<Votacion> cierre = listarVotacionesCierre(f);
+         List<Votacion> finales = listarVotacionesFinal(f);
+        if(!apertura.isEmpty()){
+            for (Votacion votacion : apertura) {
+                actualizaVotacion("2", votacion.getId());
+            }
+        }
+        if(!cierre.isEmpty()){
+            for (Votacion votacion : cierre) {
+                actualizaVotacion("3", votacion.getId());
+            }
+        }
+        if(!finales.isEmpty()){
+            for (Votacion votacion : finales) {
+                actualizaVotacion("4", votacion.getId());
+            }
+        }
+         return f;
+        
+    }
+    public JSONObject obtenerTablaVotar(String votacion) throws SQLException{
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Votar> list = listarVotar(votacion);
+        for (Votar votar : list) {
+            JSONObject j = new JSONObject();
+            j.put("partido", votar.getParitdo());
+            j.put("siglas", votar.getSiglas());
+            j.put("usuario", votar.getUsuartio());
+            j.put("cedula", votar.getCedula());
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
+    
+    
+    
+    /*----------------borado-----------------------------------------------------*/
     public boolean borrarVotacionPartidos() {
         try {
             DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
@@ -547,7 +724,6 @@ public class GestorDatos {
             return false;
         }
     }
-    
     public boolean borrarVotacionUsuarios() {
         try {
             DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
@@ -561,7 +737,6 @@ public class GestorDatos {
             return false;
         }
     }
-    
     public boolean borrarUsuarios() {
         try {
             DBManager db = DBManager.getDBManager(DBManager.DB_MGR.MYSQL_SERVER, URL_Servidor);
@@ -603,13 +778,152 @@ public class GestorDatos {
             return false;
         }
     }
+     /*-----------------------reporte-----------------------------------------*/
+    public List<Votacion> listarVotacionesCerradas() throws SQLException {
+        List<Votacion> datos = new ArrayList<>();
+        Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_LISTAR_VOTACIONES_CERRADAS)) {
+        
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                datos.add(new Votacion(rs.getInt("id"), rs.getDate("fecha_inicio"), rs.getDate("fecha_apertura"), rs.getDate("fecha_cierre"), rs.getDate("fecha_final"), rs.getInt("estado")));
+            }
+        }
+        return datos;
+    }
+    
+    public JSONObject obtenerTablaVotacionesCerradas() throws SQLException {
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Votacion> datos = listarVotacionesCerradas();
+        for (Votacion dato : datos) {
+            JSONObject j = new JSONObject();
+            j.put("id", dato.getId());
+            j.put("fecha_inicio", dato.getFechaInicio());
+            j.put("fecha_apertura", dato.getFechaApertura());
+            j.put("fecha_cierre", dato.getFechaCierre());
+            j.put("fecha_final", dato.getFechaFinal());
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
+    public List<Votar> listarVotar(String votacion) throws SQLException{
+      
+        List<Votar> lista = new ArrayList<>();
+         Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+        try (PreparedStatement stm = cnx.prepareStatement(CMD_VOTAR)) {
+            stm.clearParameters();
+            stm.setString(1, votacion);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {       
+                String siglas = rs.getString("siglas");
+                String partido = rs.getString("partido");
+                String usuario = rs.getString("usuario");
+                String cedula = rs.getString("cedula");
+                int votos = rs.getInt("votosO");
+                Votar x = new Votar(siglas,partido,usuario,cedula,votos);
+                lista.add(x);
+            }
+        }
+        
+        return lista;
+    }
+    public int numeroUsuarios(){
+     int x=0;
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+            PreparedStatement statement = cnx.prepareStatement(CMD_NUMERO_USUARIOS)) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                 x=rs.getInt("x");
+            }
+        
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }      
+        return x;
+    }
+    public int numeroVotoEfectivo(String votacion){
+     int x=0;
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+            PreparedStatement statement = cnx.prepareStatement(CMD_NUMERO_VOTO_EFECTIVO)) {
+             statement.setInt(1,Integer.parseInt(votacion));
+         
+            ResultSet rs = statement.executeQuery();
+             while (rs.next()) {
+            
+                x= rs.getInt("votos");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }      
+        return x;
+    }
+    public String ganador(String votacion){
+     String x="";
+        try (Connection cnx = db.getConnection(BASE_DATOS, LOGIN, PASSWORD);
+            PreparedStatement statement = cnx.prepareStatement(CMD_GANADOR)) {
+            statement.setString(1,votacion);
+           
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+               x= rs.getString("partido_siglas");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.err);
+        } finally {
+            if (db != null) {
+                db.closeConnection();
+            }
+        }      
+        return x;
+    }
+    public JSONObject obtenerReporte(String votacion) throws SQLException{
+        
+        JSONObject r = new JSONObject();
+        JSONArray a = new JSONArray();
+        List<Votar> list = listarVotar(votacion);
+        int usuarios =  numeroUsuarios();
+        int efectivo = numeroVotoEfectivo(votacion);
+        double porcentajeEfectivo = (100*efectivo)/usuarios;
+        int abstencionismo = (usuarios-efectivo);
+        double porcentajeAbstencionismo =(100*abstencionismo)/usuarios;
+         String ganador="";
+         ganador = ganador(votacion);
+        r.put("usuarios", usuarios);
+        r.put("efectivos", efectivo);
+        r.put("porcentajeEfectivo",porcentajeEfectivo);
+        r.put("abstencionismo",abstencionismo);
+        r.put("porcentajeAbstencionismo",porcentajeAbstencionismo);
+        r.put("ganador", ganador);
+        for (Votar votar : list) {
+            JSONObject j = new JSONObject();
+            j.put("partido", votar.getParitdo());
+            j.put("siglas", votar.getSiglas());
+            j.put("usuario", votar.getUsuartio());
+            j.put("cedula", votar.getCedula());
+            j.put("votos", votar.getVotos());
+            j.put("porcentajeVotos",(votar.getVotos()*100)/usuarios);
+            a.put(j);
+        }
+        r.put("datos", a);
+        return r;
+    }
 
     private static GestorDatos instancia = null;
     private DBManager db = null;
     private String URL_Servidor = "localhost";
     private static final String BASE_DATOS = "bd_votaciones";
     private static final String LOGIN = "root";
-    private static final String PASSWORD = "admin1234";
+    private static final String PASSWORD = "root";
     private static final String IMAGE_PATTERN_STRING = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
     private static final String FILE_PATTERN_STRING = "([^\\s]+(\\.(?i)(csv|xml))$)";
     private static final Pattern IMAGE_PATTERN = Pattern.compile(IMAGE_PATTERN_STRING);
@@ -622,11 +936,11 @@ public class GestorDatos {
             + "WHERE cedula = ? AND clave= ?;";
     private static final String CMD_VERIFICAR_VOTO = "SELECT voto_completado\n"
             + "FROM votacion_usuario \n"
-            + "WHERE votacion_id = ? AND usuario_cedula= ?;";
+            + "WHERE votacion_id = ? AND usuario_cedula= ? AND voto_completado= ?;";
     private static final String CMD_VERIFICAR_ADMINISTRADOR = "SELECT cedula\n"
             + "FROM administrador\n"
             + "WHERE usuario = ? AND clave= ?;";
-    private static final String CMD_VOTACION_ESTADO = "SELECT id_votacion\n"
+    private static final String CMD_VOTACION_ESTADO = "SELECT *\n"
             + "FROM votacion\n"
             + "WHERE estado=?";
     private static final String CMD_CAMBIAR_CLAVE
@@ -648,6 +962,29 @@ public class GestorDatos {
     private static final String CMD_INSERTAR_ADMINISTRADOR = "INSERT INTO ADMINISTRADOR\n"
             + "(cedula, nombre, apellido1, apellido2, usuario, clave)\n"
             + "VALUES (?,?,?,?,?,?)";
+    private static final String CMD_INSERTAR_USUARIO_VOTO ="INSERT INTO votacion_usuario "
+            + "(votacion_id,usuario_cedula,voto_completado) VALUES (?,?,?)";
+    private static final String CMD_ACTULIAZA_VOTO ="UPDATE votacion_partido set votos_obtenidos = ?"
+            + " WHERE votacion_id = ? AND partido_siglas = ? ";
+    private static final String CMD_CANTIDAD_VOTOS ="SELECT votos_obtenidos as votos \n" +
+            "FROM votacion_partido \n" +
+            "where votacion_id = ? and partido_siglas = ?";
+    private static final String CMD_LISTAR_VOTACIONES_FECHA_APERTURA = "SELECT id, fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
+            + "FROM bd_votaciones.votacion\n"
+            + "where fecha_apertura <= ? AND  fecha_cierre > ?"  
+            + "ORDER BY fecha_inicio";
+    private static final String CMD_LISTAR_VOTACIONES_FECHA_CIERRE = "SELECT id, fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
+            + "FROM bd_votaciones.votacion\n"
+            + "where fecha_cierre <= ? AND  fecha_final >= ?"  
+            + "ORDER BY fecha_inicio";
+     private static final String CMD_LISTAR_VOTACIONES_FECHA_FINAL = "SELECT id, fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
+            + "FROM bd_votaciones.votacion\n"
+            + "where fecha_final < ?"  
+            + "ORDER BY fecha_inicio";
+    private static final String CMD_ACTULIAZA_VOTACION ="UPDATE votacion set estado = ?"
+            + " WHERE id = ?";     
+    
+    
     private static final String CMD_LISTAR_USUARIOS = "SELECT cedula, apellido1, apellido2, nombre, activo\n"
             + "FROM bd_votaciones.usuario\n"
             + "ORDER BY apellido1, apellido2 ASC";
@@ -687,5 +1024,22 @@ public class GestorDatos {
     private static final String CMD_BORRAR_USUARIOS = "DELETE FROM bd_votaciones.usuario";
     private static final String CMD_BORRAR_VOTACIONES = "DELETE FROM bd_votaciones.votacion";
     private static final String CMD_BORRAR_PARTIDOS = "DELETE FROM bd_votaciones.partido";
+     /*------------------------------------------reporte-----------------------------------------------------------*/
+   private static final String CMD_LISTAR_VOTACIONES_CERRADAS = "SELECT id, fecha_inicio, fecha_apertura, fecha_cierre, fecha_final, estado\n"
+            + "FROM bd_votaciones.votacion\n"
+            + "where estado = 4 " 
+            + "ORDER BY fecha_inicio";
+    private static final String CMD_VOTAR = "SELECT partido.siglas,partido.nombre as partido,partido.bandera,usuario.cedula as cedula,usuario.nombre as usuario,votacion_partido.votos_obtenidos as votosO\n" +
+            "from votacion_partido,usuario,partido\n" +
+            "where votacion_partido.partido_siglas = partido.siglas \n" +
+            "and  votacion_partido.cedula_candidato = usuario.cedula\n" +
+            "and votacion_partido.votacion_id = ?;";
+    private static final String CMD_NUMERO_USUARIOS ="select count(*) as x from usuario;";
+    private static final String CMD_NUMERO_VOTO_EFECTIVO ="select count(*)as votos "
+            + "FROM  votacion_usuario "
+            + "WHERE votacion_id = ?;";
+    private static final String CMD_GANADOR ="SELECT *, max( votos_obtenidos ) maximo\n" +
+            "FROM votacion_partido \n" +
+            "WHERE votacion_id = ?;";
     
 }

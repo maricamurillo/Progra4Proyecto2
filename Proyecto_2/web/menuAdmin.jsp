@@ -13,7 +13,7 @@
 <%@taglib prefix="formulario" uri="/WEB-INF/tlds/formulario" %>
 <!DOCTYPE html>
 <html>
-    <table>
+    <table id="menuA">
         <tr>
             <td>
                 <form action="registrarUsuarios" method="POST">

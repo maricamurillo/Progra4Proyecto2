@@ -16,6 +16,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
         <script src="js/loadJSON.js" type="text/javascript"></script>
+        <link href="css/tablas.css" rel="stylesheet" type="text/css"/>
+        <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
         <script src="js/scriptUsuarios.js" type="text/javascript"></script>
         <title>Registro de Usuarios</title>
     </head>

@@ -10,6 +10,11 @@
 
 */
 
+.wrapper{
+    display: block;
+}
+
+
 body {
     background-color: white;
     background-size: cover;
@@ -50,10 +55,9 @@ legend{
     background: #f9f9f9;
     border: 1px solid #c1c1c1;
     margin-top: 2rem;
-    max-width: 600px;
+    max-width: 900px;
     margin-left: auto;
     margin-right: auto;
-    padding: 1em;
 }
 
 #tablaUsuarios{

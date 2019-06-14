@@ -1,0 +1,5 @@
+@media print {
+  header, footer, nav, aside ,DivReporte, menuA {
+  display: none;
+    }
+}
