@@ -693,6 +693,7 @@ public class GestorDatos {
         
     }
     public JSONObject obtenerTablaVotar(String votacion) throws SQLException{
+        System.out.println("modelo.gestor.GestorDatos.obtenerTablaVotar()/*/*/*/*/* votar"+votacion);
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<Votar> list = listarVotar(votacion);
@@ -707,9 +708,6 @@ public class GestorDatos {
         r.put("datos", a);
         return r;
     }
-    
-    
-    
     /*----------------borado-----------------------------------------------------*/
     public boolean borrarVotacionPartidos() {
         try {
@@ -816,6 +814,7 @@ public class GestorDatos {
             stm.clearParameters();
             stm.setString(1, votacion);
             ResultSet rs = stm.executeQuery();
+            System.out.println("modelo.gestor.GestorDatos.listarVotar()-------------"+stm.toString());
             while (rs.next()) {       
                 String siglas = rs.getString("siglas");
                 String partido = rs.getString("partido");
@@ -887,7 +886,7 @@ public class GestorDatos {
         return x;
     }
     public JSONObject obtenerReporte(String votacion) throws SQLException{
-        
+      
         JSONObject r = new JSONObject();
         JSONArray a = new JSONArray();
         List<Votar> list = listarVotar(votacion);

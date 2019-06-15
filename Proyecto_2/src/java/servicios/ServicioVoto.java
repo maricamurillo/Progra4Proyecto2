@@ -87,7 +87,9 @@ public class ServicioVoto extends HttpServlet {
         }
         if(request.getServletPath().equals("/ServicioVotoPartidos")){
             try (PrintWriter out = response.getWriter()) {
-                out.println(GestorDatos.obtenerInstancia().obtenerTablaVotar("1"));      
+                String votacion = (String)request.getSession(true).getAttribute("votacion");
+                 out.println(GestorDatos.obtenerInstancia().obtenerTablaVotar(votacion)); 
+               
             }
         }
     }
