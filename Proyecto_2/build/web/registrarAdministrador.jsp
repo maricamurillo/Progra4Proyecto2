@@ -17,6 +17,7 @@
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
         <script src="js/loadJSON.js" type="text/javascript"></script>
         <script src="js/scriptAdministradores.js" type="text/javascript"></script>
+        <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
         <title>Registro de Administradores</title>
     </head>
     <body onload="init()">
