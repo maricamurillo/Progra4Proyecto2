@@ -923,7 +923,7 @@ public class GestorDatos {
     private String URL_Servidor = "localhost";
     private static final String BASE_DATOS = "bd_votaciones";
     private static final String LOGIN = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "admin1234";
     private static final String IMAGE_PATTERN_STRING = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
     private static final String FILE_PATTERN_STRING = "([^\\s]+(\\.(?i)(csv|xml))$)";
     private static final Pattern IMAGE_PATTERN = Pattern.compile(IMAGE_PATTERN_STRING);

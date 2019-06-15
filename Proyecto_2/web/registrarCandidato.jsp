@@ -17,6 +17,7 @@
         <link href="css/estilos_1.css" rel="stylesheet" type="text/css"/>
         <script src="js/loadJSON.js" type="text/javascript"></script>
         <script src="js/scriptCandidatos.js" type="text/javascript"></script>
+        <link href="css/estilos.css" rel="stylesheet" type="text/css"/>
         <title>Registro de Candidatos</title>
     </head>
     <body onload="init()">
@@ -65,7 +66,7 @@
             </form>
         </div>
         <div id="contents">
-            <table id="tablaCandidatos" border="1">
+            <table id="tablaCandidatos">
                 <thead>
                     <tr>
                         <td colspan="7"><h3>Listado de Candidatos</h3></td>

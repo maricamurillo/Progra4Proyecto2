@@ -71,7 +71,7 @@ legend{
     margin-right: auto;
 }
 
-#tablaGruposDisponibles{
+#tablaPartidos{
     overflow: hidden;
     padding: 1em;
     background: #f9f9f9;
@@ -82,7 +82,7 @@ legend{
     margin-right: auto;
 }
 
-#tablaMisGrupos{
+#tablaVotaciones{
     overflow: hidden;
     padding: 1em;
     background: #f9f9f9;
@@ -93,7 +93,7 @@ legend{
     margin-right: auto;
 }
 
-#datosTablaMisGrupos{
+#tablaCandidatos{
     overflow: hidden;
     padding: 1em;
     background: #f9f9f9;
@@ -104,7 +104,7 @@ legend{
     margin-right: auto;
 }
 
-#grupo{
+#tablaAdministradores{
     overflow: hidden;
     padding: 1em;
     background: #f9f9f9;
